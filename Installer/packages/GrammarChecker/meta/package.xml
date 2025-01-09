@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Grammar Checker</DisplayName>
+    <Description>Files/Folders Synchronization Manager</Description>
+    <Version>1.0</Version>
+    <ReleaseDate>2025-01-15</ReleaseDate>
+    <Checkable>false</Checkable>
+    <ForcedInstallation>true</ForcedInstallation>
+    <ForcedUpdate>true</ForcedUpdate>
+    <Licenses>
+        <License name="GNU GENERAL PUBLIC LICENSE Version 3" file="LICENSE.txt"/>
+    </Licenses>
+    <Script>InstallScript.qs</Script>
+    <UserInterfaces>
+        <UserInterface>TargetDirectory.ui</UserInterface>
+    </UserInterfaces>
+</Package>
