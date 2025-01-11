@@ -159,7 +159,6 @@ void MainWindow::checkGrammar()
         std::cout << response["data"];
         return;
 #endif
-
         text.append(convo.GetLastResponse());
 
         try
@@ -186,7 +185,16 @@ void MainWindow::checkGrammar()
         for (int i = 0; i < text.length(); i++)
         {
             input.type = INPUT_KEYBOARD;
-            input.ki.wVk = VkKeyScan(text.at(i).unicode());
+            input.ki.dwFlags = KEYEVENTF_UNICODE;
+            input.ki.wScan = text[i].unicode();
+
+            if (SendInput(1, &input, sizeof(INPUT)) != 1)
+            {
+                qDebug("SendInput failed: 0x%ld\n", HRESULT_FROM_WIN32(GetLastError()));
+                return;
+            }
+
+            input.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
 
             if (SendInput(1, &input, sizeof(INPUT)) != 1)
             {
