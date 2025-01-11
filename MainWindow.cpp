@@ -34,7 +34,14 @@
 #include <QClipboard>
 #include <QDesktopServices>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wextra"
+#pragma GCC diagnostic ignored "-Wreorder"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 #include <liboai.h>
+
+#pragma GCC diagnostic pop
 
 using namespace liboai;
 
