@@ -32,6 +32,10 @@
             <translation>&amp;在系统托盘中显示</translation>
         </message>
         <message>
+            <source>&amp;Open Config</source>
+            <translation>&amp;打开配置</translation>
+        </message>
+        <message>
             <source>&amp;Show</source>
             <translation>&amp;显示</translation>
         </message>

@@ -32,6 +32,10 @@
             <translation>&amp;Отображать в системном трее</translation>
         </message>
         <message>
+            <source>&amp;Open Config</source>
+            <translation>&amp;Открыть конфигурацию</translation>
+        </message>
+        <message>
             <source>&amp;Show</source>
             <translation>&amp;Показать</translation>
         </message>

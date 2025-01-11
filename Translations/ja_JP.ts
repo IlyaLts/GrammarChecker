@@ -32,6 +32,10 @@
             <translation>&amp;システムトレイに表示</translation>
         </message>
         <message>
+            <source>&amp;Open Config</source>
+            <translation>&amp;設定を開く</translation>
+        </message>
+        <message>
             <source>&amp;Show</source>
             <translation>&amp;表示</translation>
         </message>

@@ -36,6 +36,10 @@
             <translation>&amp;Anzeigen</translation>
         </message>
         <message>
+            <source>&amp;Open Config</source>
+            <translation>&amp;Konfiguration öffnen</translation>
+        </message>
+        <message>
             <source>&amp;Quit</source>
             <translation>&amp;Beenden</translation>
         </message>

@@ -32,6 +32,7 @@
 #include <QMenuBar>
 #include <QTimer>
 #include <QClipboard>
+#include <QDesktopServices>
 
 #include <liboai.h>
 
@@ -378,6 +379,17 @@ void MainWindow::toggleShowInTray()
 
 /*
 ===================
+MainWindow::openConfig
+===================
+*/
+void MainWindow::openConfig()
+{
+    QString path(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/" + SETTINGS_FILENAME);
+    QDesktopServices::openUrl(path);
+}
+
+/*
+===================
 MainWindow::clipboardChanged
 ===================
 */
@@ -513,6 +525,7 @@ void MainWindow::setupMenus()
     smoothTypingAction = new QAction(tr("&Smooth Typing"), this);
     launchOnStartupAction = new QAction(tr("&Launch on Startup"), this);
     showInTrayAction = new QAction(tr("&Show in System Tray"));
+    openConfigAction = new QAction(tr("&Open Config"));
     showAction = new QAction(tr("&Show"), this);
     quitAction = new QAction(tr("&Quit"), this);
     version = new QAction(QString(tr("Version: %1")).arg(GRAMMAR_CHECKER_VERSION), this);
@@ -549,6 +562,7 @@ void MainWindow::setupMenus()
     settingsMenu->addAction(launchOnStartupAction);
     settingsMenu->addAction(showInTrayAction);
     settingsMenu->addSeparator();
+    settingsMenu->addAction(openConfigAction);
     settingsMenu->addAction(version);
 
     trayIconMenu = new UnhidableMenu(this);
@@ -572,6 +586,7 @@ void MainWindow::setupMenus()
     connect(smoothTypingAction, &QAction::triggered, this, &MainWindow::toggleSmoothTyping);
     connect(launchOnStartupAction, &QAction::triggered, this, &MainWindow::toggleLaunchOnStartup);
     connect(showInTrayAction, &QAction::triggered, this, &MainWindow::toggleShowInTray);
+    connect(openConfigAction, &QAction::triggered, this, &MainWindow::openConfig);
     connect(showAction, &QAction::triggered, this, std::bind(&MainWindow::trayIconActivated, this, QSystemTrayIcon::DoubleClick));
     connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
@@ -664,6 +679,7 @@ void MainWindow::retranslate()
     smoothTypingAction->setText(tr("&Smooth Typing"));
     launchOnStartupAction->setText(tr("&Launch on Startup"));
     showInTrayAction->setText(tr("&Show in System Tray"));
+    openConfigAction->setText(tr("&Open Config"));
     showAction->setText(tr("&Show"));
     quitAction->setText(tr("&Quit"));
     version->setText(QString(tr("Version: %1")).arg(GRAMMAR_CHECKER_VERSION));

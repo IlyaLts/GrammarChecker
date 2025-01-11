@@ -32,6 +32,10 @@
             <translation>&amp;सिस्टम ट्रे में दिखाएं</translation>
         </message>
         <message>
+            <source>&amp;Open Config</source>
+            <translation>&amp;कॉन्फ़िगरेशन खोलें</translation>
+        </message>
+        <message>
             <source>&amp;Show</source>
             <translation>&amp;दिखाएं</translation>
         </message>

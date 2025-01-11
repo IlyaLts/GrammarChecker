@@ -32,6 +32,10 @@
             <translation>&amp;Mostrar en la bandeja del sistema</translation>
         </message>
         <message>
+            <source>&amp;Open Config</source>
+            <translation>&amp;Abrir Configuración</translation>
+        </message>
+        <message>
             <source>&amp;Show</source>
             <translation>&amp;Mostrar</translation>
         </message>

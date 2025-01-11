@@ -32,6 +32,10 @@
             <translation>&amp;Show in System Tray</translation>
         </message>
         <message>
+            <source>&amp;Open Config</source>
+            <translation>&amp;Open Config</translation>
+        </message>
+        <message>
             <source>&amp;Show</source>
             <translation>&amp;Show</translation>
         </message>

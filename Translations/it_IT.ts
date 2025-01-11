@@ -32,6 +32,10 @@
             <translation>&amp;Mostra nella barra delle applicazioni</translation>
         </message>
         <message>
+            <source>&amp;Open Config</source>
+            <translation>&amp;Apri Configurazione</translation>
+        </message>
+        <message>
             <source>&amp;Show</source>
             <translation>&amp;Mostra</translation>
         </message>

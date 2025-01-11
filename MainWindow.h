@@ -77,6 +77,7 @@ private Q_SLOTS:
     void toggleSmoothTyping();
     void toggleLaunchOnStartup();
     void toggleShowInTray();
+    void openConfig();
     void clipboardChanged();
     void keyChanged(const QKeySequence &keySequence);
 
@@ -100,6 +101,7 @@ private:
     QAction *smoothTypingAction;
     QAction *launchOnStartupAction;
     QAction *showInTrayAction;
+    QAction *openConfigAction;
     QAction *showAction;
     QAction *quitAction;
     QAction *version;

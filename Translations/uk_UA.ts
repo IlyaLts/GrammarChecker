@@ -32,6 +32,10 @@
             <translation>&amp;Показати в системному треї</translation>
         </message>
         <message>
+            <source>&amp;Open Config</source>
+            <translation>&amp;Відкрити конфігурацію</translation>
+        </message>
+        <message>
             <source>&amp;Show</source>
             <translation>&amp;Показати</translation>
         </message>
