@@ -148,7 +148,7 @@ void MainWindow::checkGrammar()
 
     OpenAI oai;
     Conversation convo;
-    convo.AddUserData(prompt.toLocal8Bit().data());
+    convo.AddUserData(prompt.toUtf8().data());
 
     if (oai.auth.SetKey(ui->keyLineEdit->text().toLocal8Bit().data()))
     {
