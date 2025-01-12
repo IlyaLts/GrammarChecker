@@ -382,9 +382,9 @@ void MainWindow::setupMenus()
     showInTrayAction->setCheckable(true);
 
 #ifdef Q_OS_WIN
-    launchOnStartupAction->setChecked(QFile::exists(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation) + "/Startup/SyncManager.lnk"));
+    launchOnStartupAction->setChecked(QFile::exists(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation) + "/Startup/GrammarChecker.lnk"));
 #else
-    launchOnStartupAction->setChecked(QFile::exists(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/autostart/SyncManager.desktop"));
+    launchOnStartupAction->setChecked(QFile::exists(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/autostart/GrammarChecker.desktop"));
 #endif
 
     for (int i = 0; i < Application::languageCount(); i++)
