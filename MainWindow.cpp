@@ -20,8 +20,8 @@
 #include "Application.h"
 #include "MainWindow.h"
 #include "UnhidableMenu.h"
+#include "Common.h"
 #include "ui_MainWindow.h"
-#include <Windows.h>
 #include <QStringListModel>
 #include <QSettings>
 #include <QCloseEvent>
@@ -66,7 +66,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     notification.setSource(QUrl::fromLocalFile("sounds/notification.wav"));
 
-    connect(QApplication::clipboard(), QClipboard::dataChanged, this, &MainWindow::clipboardChanged);
     connect(ui->shortcutEdit, QKeySequenceEdit::keySequenceChanged, this, &MainWindow::keyChanged);
 
     setupMenus();
@@ -99,13 +98,13 @@ void MainWindow::show()
     if (QSystemTrayIcon::isSystemTrayAvailable() && showInTrayAction->isChecked())
     {
         trayIcon->show();
-        syncApp->setQuitOnLastWindowClosed(false);
+        gcApp->setQuitOnLastWindowClosed(false);
     }
     else
     {
         QMainWindow::show();
         trayIcon->hide();
-        syncApp->setQuitOnLastWindowClosed(true);
+        gcApp->setQuitOnLastWindowClosed(true);
     }
 }
 
@@ -119,46 +118,23 @@ void MainWindow::checkGrammar()
     QClipboard *clipboard = QApplication::clipboard();
     QString savedClipboard = clipboard->text();
 
-    INPUT inputs[4];
-    memset(inputs, 0, sizeof(inputs));
+    cutToClipboard();
 
-    clipboard->clear();
-    waitForClipboardChange();
-
-    // Ctrl
-    inputs[0].type = INPUT_KEYBOARD;
-    inputs[0].ki.wVk = VK_LCONTROL;
-
-    inputs[3].type = INPUT_KEYBOARD;
-    inputs[3].ki.wVk = VK_LCONTROL;
-    inputs[3].ki.dwFlags = KEYEVENTF_KEYUP;
-
-    // Cut
-    inputs[1].type = INPUT_KEYBOARD;
-    inputs[1].ki.wVk = 'X';
-
-    inputs[2].type = INPUT_KEYBOARD;
-    inputs[2].ki.wVk = 'X';
-    inputs[2].ki.dwFlags = KEYEVENTF_KEYUP;
-
-    if (SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT)) != ARRAYSIZE(inputs))
-    {
-        qDebug("SendInput failed: 0x%ld\n", HRESULT_FROM_WIN32(GetLastError()));
-        return;
-    }
-
-    waitForClipboardChange();
-
-    QString text;
+    QString output;
     QString prompt = ui->promptTextEdit->toPlainText();
     prompt.append(finalPrompt);
     prompt.append(clipboard->text());
 
     OpenAI oai;
     Conversation convo;
-    convo.AddUserData(prompt.toUtf8().data());
 
-    if (oai.auth.SetKey(ui->keyLineEdit->text().toLocal8Bit().data()))
+    if (!convo.AddUserData(prompt.toUtf8().data()))
+    {
+        qDebug("Couldn't add user input to the conversation");
+        return;
+    }
+
+    if (oai.auth.SetKey(ui->keyLineEdit->text().toUtf8().data()))
     {
 #if 0
         // Lists the currently available models
@@ -167,75 +143,37 @@ void MainWindow::checkGrammar()
         std::cout << response["data"];
         return;
 #endif
-        text.append(convo.GetLastResponse());
 
         try
         {
-            Response response = oai.ChatCompletion->create(model.toLocal8Bit().data(), convo);
-            convo.Update(response);
-            text.append(convo.GetLastResponse());
+            Response response = oai.ChatCompletion->create(model.toUtf8().data(), convo);
+
+            if (!convo.Update(response))
+            {
+                qDebug("Couldn't update the conversation given a response object");
+                return;
+            }
+
+            output.append(convo.GetLastResponse());
         }
         catch (std::exception& e)
         {
-            std::cout << e.what() << std::endl;
+            qDebug(e.what());
+            return;
         }
     }
     else
     {
         qDebug("Coundn't set the authorization key for the OpenAI API");
+        return;
     }
 
-    if (smoothTypingAction->isChecked())
-    {
-        INPUT input;
-        memset(&input, 0, sizeof(input));
-
-        for (int i = 0; i < text.length(); i++)
-        {
-            input.type = INPUT_KEYBOARD;
-            input.ki.dwFlags = KEYEVENTF_UNICODE;
-            input.ki.wScan = text[i].unicode();
-
-            if (SendInput(1, &input, sizeof(INPUT)) != 1)
-            {
-                qDebug("SendInput failed: 0x%ld\n", HRESULT_FROM_WIN32(GetLastError()));
-                return;
-            }
-
-            input.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
-
-            if (SendInput(1, &input, sizeof(INPUT)) != 1)
-            {
-                qDebug("SendInput failed: 0x%ld\n", HRESULT_FROM_WIN32(GetLastError()));
-                return;
-            }
-
-            Sleep(smoothTypingDelay);
-        }
-    }
-    else
-    {
-        clipboard->setText(text);
-        waitForClipboardChange();
-
-        // Paste
-        inputs[1].ki.wVk = 'V';
-        inputs[2].ki.wVk = 'V';
-
-        if (SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT)) != ARRAYSIZE(inputs))
-        {
-            qDebug("SendInput failed: 0x%ld\n", HRESULT_FROM_WIN32(GetLastError()));
-            return;
-        }
-
-        // Waits for clipboard content to be pasted
-        QTime dieTime = QTime::currentTime().addSecs(1);
-        while (QTime::currentTime() < dieTime)
-            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    }
+    clipboard->setText(output);
+    gcApp->waitForClipboardChange();
+    pasteFromClipboard(smoothTypingAction->isChecked(), smoothTypingDelay);
 
     clipboard->setText(savedClipboard);
-    waitForClipboardChange();
+    gcApp->waitForClipboardChange();
 
     if (notificationSoundAction->isChecked())
         notification.play();
@@ -277,7 +215,7 @@ MainWindow::quit
 */
 void MainWindow::quit()
 {
-    syncApp->quit();
+    gcApp->quit();
 }
 
 /*
@@ -337,7 +275,7 @@ void MainWindow::switchLanguage(QLocale::Language language)
     for (int i = 0; i < Application::languageCount(); i++)
         languageActions[i]->setChecked(language == languages[i].language);
 
-    syncApp->setTranslator(language);
+    gcApp->setTranslator(language);
     this->language = language;
     retranslate();
 }
@@ -369,7 +307,7 @@ MainWindow::launchOnStartup
 */
 void MainWindow::toggleLaunchOnStartup()
 {
-    syncApp->setLaunchOnStartup(launchOnStartupAction->isChecked());
+    gcApp->setLaunchOnStartup(launchOnStartupAction->isChecked());
     writeSettings();
 }
 
@@ -397,92 +335,6 @@ void MainWindow::openConfig()
 
 /*
 ===================
-MainWindow::clipboardChanged
-===================
-*/
-void MainWindow::clipboardChanged()
-{
-    m_clipboardChanged = false;
-}
-
-/*
-===================
-toNativeKey
-===================
-*/
-unsigned int toNativeKey(Qt::Key key)
-{
-    // 0 - 9
-    if (key >= Qt::Key_0 && key <= Qt::Key_9)
-        return key;
-
-    // A - Z
-    if (key >= Qt::Key_A && key <= Qt::Key_Z)
-        return key;
-
-    // F1 - F24
-    if (key >= Qt::Key_F1 && key <= Qt::Key_F24)
-        return VK_F1 + (key - Qt::Key_F1);
-
-    switch (key)
-    {
-    case Qt::Key_Escape:
-        return VK_ESCAPE;
-    case Qt::Key_Tab:
-    case Qt::Key_Backtab:
-        return VK_TAB;
-    case Qt::Key_Backspace:
-        return VK_BACK;
-    case Qt::Key_Return:
-    case Qt::Key_Enter:
-        return VK_RETURN;
-    case Qt::Key_Insert:
-        return VK_INSERT;
-    case Qt::Key_Delete:
-        return VK_DELETE;
-    case Qt::Key_Pause:
-        return VK_PAUSE;
-    case Qt::Key_Print:
-        return VK_PRINT;
-    case Qt::Key_Clear:
-        return VK_CLEAR;
-    case Qt::Key_Home:
-        return VK_HOME;
-    case Qt::Key_End:
-        return VK_END;
-    case Qt::Key_Left:
-        return VK_LEFT;
-    case Qt::Key_Up:
-        return VK_UP;
-    case Qt::Key_Right:
-        return VK_RIGHT;
-    case Qt::Key_Down:
-        return VK_DOWN;
-    case Qt::Key_PageUp:
-        return VK_PRIOR;
-    case Qt::Key_PageDown:
-        return VK_NEXT;
-    case Qt::Key_Space:
-        return VK_SPACE;
-    case Qt::Key_Asterisk:
-        return VK_MULTIPLY;
-    case Qt::Key_Plus:
-        return VK_ADD;
-    case Qt::Key_Comma:
-        return VK_SEPARATOR;
-    case Qt::Key_Minus:
-        return VK_SUBTRACT;
-    case Qt::Key_Slash:
-        return VK_DIVIDE;
-    default:
-        return 0;
-    }
-
-    return 0;
-}
-
-/*
-===================
 MainWindow::keyChanged
 ===================
 */
@@ -495,26 +347,8 @@ void MainWindow::keyChanged(const QKeySequence &keySequence)
         return;
     }
 
-    UnregisterHotKey(NULL, 0);
-
-    unsigned int modifier = 0;
-    unsigned int virtualKey = toNativeKey(keySequence[0].key());
-
-    Qt::KeyboardModifiers keyboardModifier = keySequence[0].keyboardModifiers();
-
-    if (keyboardModifier & Qt::AltModifier)
-        modifier |= MOD_ALT;
-    if (keyboardModifier & Qt::ControlModifier)
-        modifier |= MOD_CONTROL;
-    if (keyboardModifier & Qt::ShiftModifier)
-        modifier |= MOD_SHIFT;
-    if (keyboardModifier & Qt::MetaModifier)
-        modifier |= MOD_WIN;
-    //A keypad button is pressed.
-    //if (keyboardModifier & Qt::KeypadModifier)
-    //    modifier |= MOD_;
-
-    RegisterHotKey(NULL, 0, modifier, virtualKey);
+    unregisterShortcut();
+    registerShortcut(keySequence);
     ui->shortcutEdit->clearFocus();
 }
 
@@ -651,26 +485,12 @@ void MainWindow::writeSettings() const
     settings.setValue("NotificationSoundVolume", notification.volume());
     settings.setValue("SmoothTyping", smoothTypingAction->isChecked());
     settings.setValue("ShowInTray", showInTrayAction->isChecked());
-    settings.setValue("AppVersion", GRAMMAR_CHECKER_VERSION);
     settings.setValue("Language", language);
     settings.setValue("Shortcut", ui->shortcutEdit->keySequence());
     settings.setValue("Model", model);
     settings.setValue("Key", ui->keyLineEdit->text());
     settings.setValue("Prompt", ui->promptTextEdit->toPlainText());
     settings.setValue("SmoothTypingDelay", smoothTypingDelay);
-}
-
-/*
-===================
-MainWindow::waitForClipboardChange
-===================
-*/
-void MainWindow::waitForClipboardChange()
-{
-    m_clipboardChanged = true;
-
-    while (m_clipboardChanged)
-        QApplication::processEvents();
 }
 
 /*

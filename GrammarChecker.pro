@@ -16,6 +16,7 @@ CONFIG += c++20 lrelease embed_translations
 
 SOURCES += \
     Application.cpp \
+    Common.cpp \
     Main.cpp \
     MainWindow.cpp \
     NativeEventFilter.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
 
 HEADERS += \
     Application.h \
+    Common.h \
     MainWindow.h \
     NativeEventFilter.h \
     UnhidableMenu.h

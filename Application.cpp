@@ -22,6 +22,7 @@
 #include <QStandardPaths>
 #include <QFile>
 #include <QSettings>
+#include <QClipboard>
 
 Language defaultLanguage = { QLocale::English, QLocale::UnitedStates, ":/i18n/en_US.qm", "&English" };
 
@@ -50,7 +51,22 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
     QString localDataPath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     QSettings settings(localDataPath + "/" + SETTINGS_FILENAME, QSettings::IniFormat);
     QLocale::Language systemLanguage = QLocale::system().language();
-    setTranslator(static_cast<QLocale::Language>(settings.value("Language", systemLanguage).toInt()));
+
+    setTranslator(static_cast<QLocale::Language>(settings.value("Language", systemLanguage).toInt()));    
+    connect(QApplication::clipboard(), QClipboard::dataChanged, this, &Application::clipboardChanged);
+}
+
+/*
+===================
+Application::waitForClipboardChange
+===================
+*/
+void Application::waitForClipboardChange()
+{
+    m_clipboardChanged = true;
+
+    while (m_clipboardChanged)
+        QApplication::processEvents();
 }
 
 /*
@@ -155,4 +171,14 @@ Application::languageCount
 int Application::languageCount()
 {
     return static_cast<int>(sizeof(languages) / sizeof(Language));
+}
+
+/*
+===================
+Application::clipboardChanged
+===================
+*/
+void Application::clipboardChanged()
+{
+    m_clipboardChanged = false;
 }

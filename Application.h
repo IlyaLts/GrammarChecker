@@ -23,7 +23,7 @@
 #include <QApplication>
 #include <QTranslator>
 
-#define syncApp (static_cast<Application *>(QCoreApplication::instance()))
+#define gcApp (static_cast<Application *>(QCoreApplication::instance()))
 
 #define GRAMMAR_CHECKER_VERSION     "1.0"
 #define SETTINGS_FILENAME           "Settings.ini"
@@ -45,15 +45,21 @@ public:
 
     Application(int &argc, char **argv);
 
+    void waitForClipboardChange();
     void setLaunchOnStartup(bool enable);
     void setTranslator(QLocale::Language language);
 
     static int languageCount();
 
+private Q_SLOTS:
+
+    void clipboardChanged();
+
 private:
 
     QTranslator translator;
     QLocale locale;
+    bool m_clipboardChanged = false;
 };
 
 #endif // APPLICATION_H

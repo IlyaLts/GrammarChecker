@@ -78,7 +78,6 @@ private Q_SLOTS:
     void toggleLaunchOnStartup();
     void toggleShowInTray();
     void openConfig();
-    void clipboardChanged();
     void keyChanged(const QKeySequence &keySequence);
 
 private:
@@ -86,7 +85,6 @@ private:
     void setupMenus();
     void readSettings();
     void writeSettings() const;
-    void waitForClipboardChange();
     void retranslate();
 
     NativeEventFilter filter;
@@ -117,7 +115,6 @@ private:
 
     QLocale::Language language;
     bool appInitiated = false;
-    bool m_clipboardChanged = false;
     int smoothTypingDelay = SMOOTH_TYPING_DELAY;
 };
 
