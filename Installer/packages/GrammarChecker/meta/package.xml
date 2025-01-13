@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
     <DisplayName>Grammar Checker</DisplayName>
-    <Description>Files/Folders Synchronization Manager</Description>
+    <Description>Grammar checker for any text field via keyboard shortcut using LLM</Description>
     <Version>1.0</Version>
     <ReleaseDate>2025-01-15</ReleaseDate>
     <Checkable>false</Checkable>
