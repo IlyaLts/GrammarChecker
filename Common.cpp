@@ -30,6 +30,7 @@ cutToClipboard
 */
 void cutToClipboard()
 {
+#ifdef Q_OS_WIN
     INPUT inputs[4];
     memset(inputs, 0, sizeof(inputs));
 
@@ -56,6 +57,7 @@ void cutToClipboard()
     }
 
     gcApp->waitForClipboardChange();
+#endif
 }
 
 /*
@@ -65,6 +67,7 @@ pasteFromClipboard
 */
 void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay)
 {
+#ifdef Q_OS_WIN
     QString clipboard = QApplication::clipboard()->text();
 
     if (smoothPasting)
@@ -122,16 +125,7 @@ void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay)
         while (QTime::currentTime() < dieTime)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
-}
-
-/*
-===================
-unregisterShortcut
-===================
-*/
-void unregisterShortcut()
-{
-    UnregisterHotKey(NULL, 0);
+#endif
 }
 
 /*
@@ -141,6 +135,7 @@ registerShortcut
 */
 void registerShortcut(const QKeySequence &keySequence)
 {
+#ifdef Q_OS_WIN
     unsigned int modifier = 0;
     unsigned int virtualKey = toNativeKey(keySequence[0].key());
 
@@ -159,6 +154,19 @@ void registerShortcut(const QKeySequence &keySequence)
     //    modifier |= MOD_;
 
     RegisterHotKey(NULL, 0, modifier, virtualKey);
+#endif
+}
+
+/*
+===================
+unregisterShortcut
+===================
+*/
+void unregisterShortcut()
+{
+#ifdef Q_OS_WIN
+    UnregisterHotKey(NULL, 0);
+#endif
 }
 
 /*
@@ -168,6 +176,7 @@ toNativeKey
 */
 unsigned int toNativeKey(Qt::Key key)
 {
+#ifdef Q_OS_WIN
     // 0 - 9
     if (key >= Qt::Key_0 && key <= Qt::Key_9)
         return key;
@@ -233,6 +242,7 @@ unsigned int toNativeKey(Qt::Key key)
     default:
         return 0;
     }
+#endif
 
     return 0;
 }

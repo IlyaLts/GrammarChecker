@@ -19,7 +19,10 @@
 
 #include "NativeEventFilter.h"
 #include "MainWindow.h"
+
+#ifdef Q_OS_WIN
 #include <Windows.h>
+#endif
 
 /*
 ===================
@@ -28,6 +31,7 @@ NativeEventFilter::nativeEventFilter
 */
 bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
 {
+#ifdef Q_OS_WIN
     MSG *msg = static_cast<MSG *>(message);
 
     Q_UNUSED(eventType);
@@ -41,6 +45,7 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
         //quint32 id = static_cast<quint32>(msg->wParam);
         return true;
     }
+#endif
 
     return false;
 }
