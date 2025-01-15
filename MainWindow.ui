@@ -48,6 +48,9 @@
        <property name="focusPolicy">
         <enum>Qt::FocusPolicy::ClickFocus</enum>
        </property>
+       <property name="keySequence">
+        <string notr="true"/>
+       </property>
        <property name="clearButtonEnabled">
         <bool>true</bool>
        </property>

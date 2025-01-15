@@ -24,8 +24,9 @@
 
 void cutToClipboard();
 void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay);
-void registerShortcut(const QKeySequence &keySequence);
+void registerShortcut(const QKeyCombination &keyCombination);
 void unregisterShortcut();
+unsigned int toNativeModifier(Qt::KeyboardModifiers modifiers);
 unsigned int toNativeKey(Qt::Key key);
 
 #endif // COMMON_H

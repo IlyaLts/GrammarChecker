@@ -21,7 +21,10 @@
 #include "Common.h"
 #include <QClipboard>
 #include <QTime>
+
+#ifdef Q_OS_WIN
 #include <windows.h>
+#endif
 
 /*
 ===================
@@ -133,25 +136,11 @@ void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay)
 registerShortcut
 ===================
 */
-void registerShortcut(const QKeySequence &keySequence)
+void registerShortcut(const QKeyCombination &keyCombination)
 {
 #ifdef Q_OS_WIN
-    unsigned int modifier = 0;
-    unsigned int virtualKey = toNativeKey(keySequence[0].key());
-
-    Qt::KeyboardModifiers keyboardModifier = keySequence[0].keyboardModifiers();
-
-    if (keyboardModifier & Qt::AltModifier)
-        modifier |= MOD_ALT;
-    if (keyboardModifier & Qt::ControlModifier)
-        modifier |= MOD_CONTROL;
-    if (keyboardModifier & Qt::ShiftModifier)
-        modifier |= MOD_SHIFT;
-    if (keyboardModifier & Qt::MetaModifier)
-        modifier |= MOD_WIN;
-    //A keypad button is pressed.
-    //if (keyboardModifier & Qt::KeypadModifier)
-    //    modifier |= MOD_;
+    UINT modifier = toNativeModifier(keyCombination.keyboardModifiers());
+    UINT virtualKey = toNativeKey(keyCombination.key());
 
     RegisterHotKey(NULL, 0, modifier, virtualKey);
 #endif
@@ -167,6 +156,27 @@ void unregisterShortcut()
 #ifdef Q_OS_WIN
     UnregisterHotKey(NULL, 0);
 #endif
+}
+
+/*
+===================
+toNativeModifier
+===================
+*/
+unsigned int toNativeModifier(Qt::KeyboardModifiers modifiers)
+{
+    UINT nativeModifiers = 0;
+
+    if (modifiers & Qt::AltModifier)
+        nativeModifiers |= MOD_ALT;
+    if (modifiers & Qt::ControlModifier)
+        nativeModifiers |= MOD_CONTROL;
+    if (modifiers & Qt::ShiftModifier)
+        nativeModifiers |= MOD_SHIFT;
+    if (modifiers & Qt::MetaModifier)
+        nativeModifiers |= MOD_WIN;
+
+    return nativeModifiers;
 }
 
 /*
@@ -243,6 +253,4 @@ unsigned int toNativeKey(Qt::Key key)
         return 0;
     }
 #endif
-
-    return 0;
 }

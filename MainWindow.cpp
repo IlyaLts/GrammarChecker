@@ -340,15 +340,13 @@ MainWindow::keyChanged
 */
 void MainWindow::keyChanged(const QKeySequence &keySequence)
 {
-    if (keySequence.isEmpty())
-    {
-        // Translates shortcut field placeholder
-        retranslate();
-        return;
-    }
-
     unregisterShortcut();
-    registerShortcut(keySequence);
+
+    if (keySequence.isEmpty())
+        retranslate();      // Translates shortcut field placeholder
+    else
+        registerShortcut(keySequence[0]);
+
     ui->shortcutEdit->clearFocus();
 }
 
