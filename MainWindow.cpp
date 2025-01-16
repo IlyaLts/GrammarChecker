@@ -181,6 +181,16 @@ void MainWindow::checkGrammar()
 
 /*
 ===================
+MainWindow::keySequence
+===================
+*/
+QKeySequence MainWindow::keySequence() const
+{
+    return ui->shortcutEdit->keySequence();
+}
+
+/*
+===================
 MainWindow::closeEvent
 ===================
 */
@@ -340,12 +350,15 @@ MainWindow::keyChanged
 */
 void MainWindow::keyChanged(const QKeySequence &keySequence)
 {
-    unregisterShortcut();
-
+    // Translates shortcut field placeholder
     if (keySequence.isEmpty())
-        retranslate();      // Translates shortcut field placeholder
-    else
-        registerShortcut(keySequence[0]);
+        retranslate();
+
+    for (int i = 0; i < 4; i++)
+        unregisterShortcut(i);
+
+    for (int i = 0; i < keySequence.count(); i++)
+        registerShortcut(i, keySequence[i]);
 
     ui->shortcutEdit->clearFocus();
 }

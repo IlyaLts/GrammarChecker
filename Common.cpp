@@ -136,13 +136,13 @@ void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay)
 registerShortcut
 ===================
 */
-void registerShortcut(const QKeyCombination &keyCombination)
+void registerShortcut(int id, const QKeyCombination &keyCombination)
 {
 #ifdef Q_OS_WIN
     UINT modifier = toNativeModifier(keyCombination.keyboardModifiers());
     UINT virtualKey = toNativeKey(keyCombination.key());
 
-    RegisterHotKey(NULL, 0, modifier, virtualKey);
+    RegisterHotKey(NULL, id, modifier, virtualKey);
 #endif
 }
 
@@ -151,10 +151,10 @@ void registerShortcut(const QKeyCombination &keyCombination)
 unregisterShortcut
 ===================
 */
-void unregisterShortcut()
+void unregisterShortcut(int id)
 {
 #ifdef Q_OS_WIN
-    UnregisterHotKey(NULL, 0);
+    UnregisterHotKey(NULL, id);
 #endif
 }
 

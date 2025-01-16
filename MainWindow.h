@@ -57,6 +57,7 @@ public:
     ~MainWindow();
 
     void checkGrammar();
+    QKeySequence keySequence() const;
 
 public Q_SLOTS:
 

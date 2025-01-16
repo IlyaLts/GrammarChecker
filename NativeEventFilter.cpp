@@ -19,6 +19,7 @@
 
 #include "NativeEventFilter.h"
 #include "MainWindow.h"
+#include "Common.h"
 
 #ifdef Q_OS_WIN
 #include <Windows.h>
@@ -40,9 +41,17 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
     if (msg->message == WM_HOTKEY)
     {
         if (window)
-            window->checkGrammar();
+        {
+            for (int i = 0; i < window->keySequence().count(); i++)
+            {
+                UINT modifier = toNativeModifier(window->keySequence()[i].keyboardModifiers());
+                UINT virtualKey = toNativeKey(window->keySequence()[i].key());
 
-        //quint32 id = static_cast<quint32>(msg->wParam);
+                if (modifier == LOWORD(msg->lParam) && virtualKey == HIWORD(msg->lParam))
+                    window->checkGrammar();
+            }
+        }
+
         return true;
     }
 #endif
