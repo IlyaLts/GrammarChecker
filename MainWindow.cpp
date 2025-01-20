@@ -33,6 +33,7 @@
 #include <QTimer>
 #include <QClipboard>
 #include <QDesktopServices>
+#include <QMessageBox>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wextra"
@@ -158,13 +159,21 @@ void MainWindow::checkGrammar()
         }
         catch (std::exception& e)
         {
+#ifdef QT_DEBUG
             qDebug(e.what());
+#else
+            QMessageBox::critical(nullptr, "Grammar Checker", e.what());
+#endif
             return;
         }
     }
     else
     {
+#ifdef QT_DEBUG
         qDebug("Coundn't set the authorization key for the OpenAI API");
+#else
+        QMessageBox::critical(nullptr, "Grammar Checker", "Coundn't set the authorization key for the OpenAI API");
+#endif
         return;
     }
 
