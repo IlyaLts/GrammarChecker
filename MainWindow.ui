@@ -55,7 +55,7 @@
         <bool>true</bool>
        </property>
        <property name="maximumSequenceLength">
-        <longLong>1</longLong>
+        <longLong>4</longLong>
        </property>
       </widget>
      </item>
