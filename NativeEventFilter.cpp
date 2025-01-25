@@ -20,6 +20,7 @@
 #include "NativeEventFilter.h"
 #include "MainWindow.h"
 #include "Common.h"
+#include <QMutex>
 
 #ifdef Q_OS_WIN
 #include <Windows.h>
@@ -48,11 +49,18 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
                 UINT virtualKey = toNativeKey(window->keySequence()[i].key());
 
                 if (modifier == LOWORD(msg->lParam) && virtualKey == HIWORD(msg->lParam))
+                {
+                    static QMutex mutex;
+
+                    if (!mutex.tryLock())
+                        return true;
+
                     window->checkGrammar();
+                    mutex.unlock();
+                    return true;
+                }
             }
         }
-
-        return true;
     }
 #endif
 
