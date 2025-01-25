@@ -1,5 +1,10 @@
 ==========================
+1.0.1 - Jan 25, 2025
+==========================
+- Added error messages on checking grammar.
+- Increased maximum number of shortcuts up to 4.
+
+==========================
 1.0 - Jan 15, 2025
 ==========================
-
 - Initial release.
