@@ -8,9 +8,9 @@ Currently, it utilizes the OpenAI API, requiring an API key to function. Simply 
 
 ![GrammarChecker](https://github.com/user-attachments/assets/b69ea8cc-3627-4b3a-a819-a2a3e0284fa8)
 # Dependencies
-- <a href="https://github.com/D7EAD/liboai">liboai</a>
-- <a href="https://github.com/nlohmann/json">nlohmann-json</a>
-- <a href="https://curl.se/">cURL</a>
+- [liboai](https://github.com/D7EAD/liboai)
+- [nlohmann-json](https://github.com/nlohmann/json)
+- [curl](https://github.com/curl/curl)
 
 # Building
 Requires Qt 6.8 or newer. Buildable on Windows with Qt Creator.
