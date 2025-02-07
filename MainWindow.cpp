@@ -131,7 +131,7 @@ void MainWindow::checkGrammar()
 
     if (!convo.AddUserData(prompt.toUtf8().data()))
     {
-        qDebug("Couldn't add user input to the conversation");
+        qDebug() << "Couldn't add user input to the conversation";
         return;
     }
 
@@ -151,7 +151,7 @@ void MainWindow::checkGrammar()
 
             if (!convo.Update(response))
             {
-                qDebug("Couldn't update the conversation given a response object");
+                qDebug() << "Couldn't update the conversation given a response object";
                 return;
             }
 
@@ -160,7 +160,7 @@ void MainWindow::checkGrammar()
         catch (std::exception& e)
         {
 #ifdef QT_DEBUG
-            qDebug(e.what());
+            qDebug() << e.what();
 #else
             QMessageBox::critical(nullptr, "Grammar Checker", e.what());
 #endif
@@ -170,7 +170,7 @@ void MainWindow::checkGrammar()
     else
     {
 #ifdef QT_DEBUG
-        qDebug("Coundn't set the authorization key for the OpenAI API");
+        qDebug() << "Coundn't set the authorization key for the OpenAI API";
 #else
         QMessageBox::critical(nullptr, "Grammar Checker", "Coundn't set the authorization key for the OpenAI API");
 #endif

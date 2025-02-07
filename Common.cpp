@@ -55,7 +55,7 @@ void cutToClipboard()
 
     if (SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT)) != ARRAYSIZE(inputs))
     {
-        qDebug("SendInput failed: 0x%ld", HRESULT_FROM_WIN32(GetLastError()));
+        qDebug().nospace() << "SendInput failed: 0x" << HRESULT_FROM_WIN32(GetLastError());
         return;
     }
 
@@ -89,7 +89,7 @@ void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay)
 
             if (SendInput(ARRAYSIZE(input), input, sizeof(INPUT)) != ARRAYSIZE(input))
             {
-                qDebug("SendInput failed: 0x%ld", HRESULT_FROM_WIN32(GetLastError()));
+                qDebug().nospace() << "SendInput failed: 0x" << HRESULT_FROM_WIN32(GetLastError());
                 return;
             }
 
@@ -119,7 +119,7 @@ void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay)
 
         if (SendInput(ARRAYSIZE(input), input, sizeof(INPUT)) != ARRAYSIZE(input))
         {
-            qDebug("SendInput failed: 0x%ld", HRESULT_FROM_WIN32(GetLastError()));
+            qDebug().nospace() << "SendInput failed: 0x" << HRESULT_FROM_WIN32(GetLastError());
             return;
         }
 
