@@ -4,7 +4,7 @@
 ![chrome_ROjd9ShCmE](https://github.com/user-attachments/assets/6724e3b6-2858-413b-976f-e78d640c39b2)
 
 # How It Works
-It utilizes the OpenAI API, supporting both OpenAI and Google Gemini models, and requires an API key to function. It's also possible to add other custom models via config. Simply select the text you want to check and trigger the assigned shortcut. Grammar Checker can be automatically launched on startup and run in the system tray. The main window provides a user-friendly interface where you can assign any specific keyboard shortcut for triggering grammar checks or adjust the prompt requirements to align with your specific writing needs, such as translating text into different language or something else.
+It utilizes the OpenAI API, supporting both OpenAI and Google Gemini models (It is possible to add other custom models via config), and requires an API key to function. Simply select the text you want to check and trigger the assigned shortcut. Grammar Checker can be automatically launched on startup and run in the system tray. The main window provides a user-friendly interface where you can assign any specific keyboard shortcut for triggering grammar checks or adjust the prompt requirements to align with your specific writing needs, such as translating text into different language or something else.
 
 ![GrammarChecker_vyg8O5BiYc](https://github.com/user-attachments/assets/bcfd0d88-ee1a-47ae-91c4-90599f293b88)
 # Dependencies
