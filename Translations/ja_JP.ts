@@ -76,8 +76,12 @@
           <translation>ショートカット：</translation>
         </message>
         <message>
-          <source>OpenAI API key:</source>
-          <translation>OpenAI APIキー：</translation>
+            <source>Model:</source>
+            <translation>モデル:</translation>
+        </message>
+        <message>
+          <source>API key:</source>
+          <translation>APIキー：</translation>
         </message>
         <message>
           <source>Prompt:</source>

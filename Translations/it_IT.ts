@@ -76,8 +76,12 @@
           <translation>Scorciatoia:</translation>
         </message>
         <message>
-          <source>OpenAI API key:</source>
-          <translation>Chiave API OpenAI:</translation>
+            <source>Model:</source>
+            <translation>Modello:</translation>
+        </message>
+        <message>
+          <source>API key:</source>
+          <translation>Chiave API:</translation>
         </message>
         <message>
           <source>Prompt:</source>

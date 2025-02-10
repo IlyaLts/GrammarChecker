@@ -76,8 +76,12 @@
           <translation>Atajo de teclado:</translation>
         </message>
         <message>
-          <source>OpenAI API key:</source>
-          <translation>Clave API de OpenAI:</translation>
+            <source>Model:</source>
+            <translation>Modelo:</translation>
+        </message>
+        <message>
+          <source>API key:</source>
+          <translation>Clave de API:</translation>
         </message>
         <message>
           <source>Prompt:</source>

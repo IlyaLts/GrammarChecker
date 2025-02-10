@@ -76,8 +76,12 @@
             <translation>Shortcut:</translation>
         </message>
         <message>
-            <source>OpenAI API key:</source>
-            <translation>OpenAI API key:</translation>
+            <source>Model:</source>
+            <translation>Model:</translation>
+        </message>
+        <message>
+            <source>API key:</source>
+            <translation>API key:</translation>
         </message>
         <message>
             <source>Prompt:</source>

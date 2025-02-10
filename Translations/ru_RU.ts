@@ -69,23 +69,23 @@
         </message>
         <message>
             <source>Press shortcut</source>
-            <translation lang="en">Press shortcut</translation>
-            <translation lang="ru">Нажмите сочетание клавиш</translation>
+            <translation>Нажмите сочетание клавиш</translation>
         </message>
         <message>
             <source>Shortcut:</source>
-            <translation lang="en">Shortcut:</translation>
-            <translation lang="ru">Сочетание клавиш:</translation>
+            <translation>Сочетание клавиш:</translation>
         </message>
         <message>
-            <source>OpenAI API key:</source>
-            <translation lang="en">OpenAI API key:</translation>
-            <translation lang="ru">Ключ API OpenAI:</translation>
+            <source>Model:</source>
+            <translation>Модель:</translation>
+        </message>
+        <message>
+            <source>API key:</source>
+            <translation>Ключ API:</translation>
         </message>
         <message>
             <source>Prompt:</source>
-            <translation lang="en">Prompt:</translation>
-            <translation lang="ru">Подсказка:</translation>
+            <translation>Подсказка:</translation>
         </message>
     </context>
 </TS>

@@ -67,7 +67,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     notification.setSource(QUrl::fromLocalFile("sounds/notification.wav"));
 
-    connect(ui->shortcutEdit, QKeySequenceEdit::keySequenceChanged, this, &MainWindow::keyChanged);
+    connect(ui->shortcutEdit, QKeySequenceEdit::keySequenceChanged, this, &MainWindow::keySequenceChanged);
+    connect(ui->keyLineEdit, QLineEdit::textChanged, this, &MainWindow::keyChanged);
+    connect(ui->modelComboBox, QComboBox::activated, this, &MainWindow::modelChanged);
 
     setupMenus();
     readSettings();
@@ -121,13 +123,15 @@ void MainWindow::checkGrammar()
 
     cutToClipboard();
 
+    auto modelData = ui->modelComboBox->currentData().value<QPair<QString, ModelProvider *>>();
+    QString modelName = modelData.first;
+    ModelProvider *model = modelData.second;
+    OpenAI oai(model->url.toUtf8().data());
+    Conversation convo;
     QString output;
     QString prompt = ui->promptTextEdit->toPlainText();
     prompt.append(finalPrompt);
     prompt.append(clipboard->text());
-
-    OpenAI oai;
-    Conversation convo;
 
     if (!convo.AddUserData(prompt.toUtf8().data()))
     {
@@ -147,7 +151,7 @@ void MainWindow::checkGrammar()
 
         try
         {
-            Response response = oai.ChatCompletion->create(model.toUtf8().data(), convo);
+            Response response = oai.ChatCompletion->create(modelName.toUtf8().data(), convo);
 
             if (!convo.Update(response))
             {
@@ -354,10 +358,10 @@ void MainWindow::openConfig()
 
 /*
 ===================
-MainWindow::keyChanged
+MainWindow::keySequenceChanged
 ===================
 */
-void MainWindow::keyChanged(const QKeySequence &keySequence)
+void MainWindow::keySequenceChanged(const QKeySequence &keySequence)
 {
     // Translates shortcut field placeholder
     if (keySequence.isEmpty())
@@ -370,6 +374,34 @@ void MainWindow::keyChanged(const QKeySequence &keySequence)
         registerShortcut(i, keySequence[i]);
 
     ui->shortcutEdit->clearFocus();
+}
+
+/*
+===================
+MainWindow::keyChanged
+===================
+*/
+void MainWindow::keyChanged(const QString &key)
+{
+    if (!ui->modelComboBox->count())
+        return;
+
+    ui->modelComboBox->currentData().value<QPair<QString, ModelProvider *>>().second->key = key;
+}
+
+/*
+===================
+MainWindow::modelChanged
+===================
+*/
+void MainWindow::modelChanged(int index)
+{
+    Q_UNUSED(index);
+
+    if (!ui->modelComboBox->count())
+        return;
+
+    ui->keyLineEdit->setText(ui->modelComboBox->currentData().value<QPair<QString, ModelProvider *>>().second->key);
 }
 
 /*
@@ -465,6 +497,9 @@ void MainWindow::readSettings()
 {
     QSettings settings(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/" + SETTINGS_FILENAME, QSettings::IniFormat);
 
+    providers.clear();
+    ui->modelComboBox->clear();
+
     resize(QSize(settings.value("Width", 500).toInt(), settings.value("Height", 300).toInt()));
     setWindowState(settings.value("Fullscreen", false).toBool() ? Qt::WindowMaximized : Qt::WindowActive);
 
@@ -474,12 +509,61 @@ void MainWindow::readSettings()
     bool showInTray = settings.value("ShowInTray", QSystemTrayIcon::isSystemTrayAvailable()).toBool();
     showInTrayAction->setChecked(showInTray);
     language = static_cast<QLocale::Language>(settings.value("Language", QLocale::system().language()).toInt());
-
     ui->shortcutEdit->setKeySequence(QKeySequence(settings.value("Shortcut", QKeySequence(DEFAULT_SHORTCUT_KEY)).toString()));
-    model = settings.value("Model", DEFAULT_MODEL).toString();
-    ui->keyLineEdit->setText(settings.value("key", QString()).toString());
     ui->promptTextEdit->setText(settings.value("Prompt", defaultPrompt).toString());
     smoothTypingDelay = settings.value("SmoothTypingDelay", SMOOTH_TYPING_DELAY).toInt();
+
+    providers.insert("OpenAI", { "https://api.openai.com/v1", "", {"gpt-4o-mini"} });
+
+    providers.insert("Google", { "https://generativelanguage.googleapis.com/v1beta", "", { "gemini-2.0-flash",
+                                                                                           "gemini-1.5-flash",
+                                                                                           "gemini-1.5-flash-8b",
+                                                                                           "gemini-1.5-pro" } });
+
+    //providers.insert("DeepSeek", { "https://api.deepseek.com", "", { "deepseek-chat" } });
+
+    // Loads models
+    for (auto &provider : settings.childGroups())
+    {
+        if (!providers.contains(provider))
+            providers.insert(provider, ModelProvider());
+
+        ModelProvider &modelProvider = providers[provider];
+
+        settings.beginGroup(provider);
+
+        modelProvider.url = settings.value("URL", modelProvider.url).toString();
+        modelProvider.key = settings.value("Key", modelProvider.key).toString();
+
+        settings.beginGroup("Models");
+
+        for (auto &model : settings.allKeys())
+            modelProvider.models.insert(model);
+
+        settings.endGroup();
+        settings.endGroup();
+    }
+
+    // Model combo box
+    for (auto it = providers.begin(); it != providers.end(); it++)
+        for (auto &model : it.value().models)
+            ui->modelComboBox->addItem(it.key() + "/" + model, QVariant::fromValue(QPair(model, &it.value())));
+
+    // Loads the last-used model
+    if (ui->modelComboBox->count())
+    {
+        auto model = ui->modelComboBox->currentData().value<QPair<QString, ModelProvider *>>();
+        QString currentModel = settings.value("CurrentModel").toString();
+
+        int index = ui->modelComboBox->findText(currentModel);
+
+        if (index >= 0)
+            ui->modelComboBox->setCurrentIndex(index);
+    }
+
+    // Key line edit
+    if (ui->modelComboBox->count())
+        ui->keyLineEdit->setText(ui->modelComboBox->currentData().value<QPair<QString, ModelProvider *>>().second->key);
 }
 
 /*
@@ -507,10 +591,26 @@ void MainWindow::writeSettings() const
     settings.setValue("ShowInTray", showInTrayAction->isChecked());
     settings.setValue("Language", language);
     settings.setValue("Shortcut", ui->shortcutEdit->keySequence());
-    settings.setValue("Model", model);
-    settings.setValue("Key", ui->keyLineEdit->text());
     settings.setValue("Prompt", ui->promptTextEdit->toPlainText());
     settings.setValue("SmoothTypingDelay", smoothTypingDelay);
+
+    // Models
+    for (auto it = providers.begin(); it != providers.end(); it++)
+    {
+        settings.beginGroup(it.key());
+        settings.setValue("URL", it.value().url);
+        settings.setValue("Key", it.value().key);
+        settings.beginGroup("Models");
+
+        for (auto &model : it.value().models)
+            settings.setValue(model, "");
+
+        settings.endGroup();
+        settings.endGroup();
+    }
+
+    if (ui->modelComboBox->count())
+        settings.setValue("CurrentModel", ui->modelComboBox->currentText());
 }
 
 /*
@@ -532,7 +632,8 @@ void MainWindow::retranslate()
     version->setText(QString(tr("Version: %1")).arg(GRAMMAR_CHECKER_VERSION));
 
     ui->shortcutLabel->setText(tr("Shortcut:"));
-    ui->keyLabel->setText(tr("OpenAI API key:"));
+    ui->modelLabel->setText(tr("Model:"));
+    ui->keyLabel->setText(tr("API key:"));
     ui->promptLabel->setText(tr("Prompt:"));
 
     if (QLineEdit *lineEdit = ui->shortcutEdit->findChild<QLineEdit *>("qt_keysequenceedit_lineedit"))

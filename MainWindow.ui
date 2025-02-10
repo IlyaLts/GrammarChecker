@@ -60,9 +60,23 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="modelLabel">
+       <property name="text">
+        <string>Model:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="modelComboBox">
+       <property name="insertPolicy">
+        <enum>QComboBox::InsertPolicy::InsertAlphabetically</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QLabel" name="keyLabel">
        <property name="text">
-        <string>OpenAI API key:</string>
+        <string>API key:</string>
        </property>
       </widget>
      </item>
@@ -121,7 +135,6 @@
  <tabstops>
   <tabstop>promptTextEdit</tabstop>
   <tabstop>keyLineEdit</tabstop>
-  <tabstop>shortcutEdit</tabstop>
  </tabstops>
  <resources/>
  <connections/>

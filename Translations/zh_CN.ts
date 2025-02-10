@@ -76,8 +76,12 @@
           <translation>快捷键：</translation>
         </message>
         <message>
-          <source>OpenAI API key:</source>
-          <translation>OpenAI API 密钥：</translation>
+            <source>Model:</source>
+            <translation>模型:</translation>
+        </message>
+        <message>
+          <source>API key:</source>
+          <translation>API 密钥：</translation>
         </message>
         <message>
           <source>Prompt:</source>

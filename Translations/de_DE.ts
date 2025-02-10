@@ -76,8 +76,12 @@
           <translation>Tastenkombination:</translation>
         </message>
         <message>
-          <source>OpenAI API key:</source>
-          <translation>OpenAI API-Schlüssel:</translation>
+            <source>Model:</source>
+            <translation>Modell:</translation>
+        </message>
+        <message>
+          <source>API key:</source>
+          <translation>API-Schlüssel:</translation>
         </message>
         <message>
           <source>Prompt:</source>

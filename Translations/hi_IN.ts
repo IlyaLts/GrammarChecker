@@ -76,8 +76,12 @@
           <translation>शॉर्टकट:</translation>
         </message>
         <message>
-          <source>OpenAI API key:</source>
-          <translation>OpenAI API कुंजी:</translation>
+            <source>Model:</source>
+            <translation>मॉडल:</translation>
+        </message>
+        <message>
+          <source>API key:</source>
+          <translation>API कुंजी:</translation>
         </message>
         <message>
           <source>Prompt:</source>

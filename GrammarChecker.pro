@@ -1,11 +1,11 @@
 QT += widgets multimedia
 
-INCLUDEPATH += liboai-4.0.1/liboai/include/ \
-               curl-8.11.1_3-win64-mingw\include \
-               json\include
+INCLUDEPATH += liboai-main/liboai/include/ \
+               curl-8.11.1_3-win64-mingw/include \
+               json/include
 
 LIBS += -lUser32 \
-        -L"$$PWD/liboai-4.0.1/liboai" -lliboai \
+        -L"$$PWD/liboai-main/liboai" -lliboai \
         -L"$$PWD/curl-8.11.1_3-win64-mingw/lib" -llibcurl -llibcurl.dll
 
 CONFIG += c++20 lrelease embed_translations

@@ -76,8 +76,12 @@
           <translation>Клавіатура:</translation>
         </message>
         <message>
-          <source>OpenAI API key:</source>
-          <translation>Ключ API OpenAI:</translation>
+            <source>Model:</source>
+            <translation>Модель:</translation>
+        </message>
+        <message>
+          <source>API key:</source>
+          <translation>Ключ API:</translation>
         </message>
         <message>
           <source>Prompt:</source>

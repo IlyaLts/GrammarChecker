@@ -76,8 +76,12 @@
           <translation>Atalho:</translation>
         </message>
         <message>
-          <source>OpenAI API key:</source>
-          <translation>Chave da API OpenAI:</translation>
+            <source>Model:</source>
+            <translation>Modelo:</translation>
+        </message>
+        <message>
+          <source>API key:</source>
+          <translation>Chave da API:</translation>
         </message>
         <message>
           <source>Prompt:</source>

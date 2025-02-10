@@ -45,7 +45,7 @@
         </message>
         <message>
             <source>Version: %1</source>
-            <translation>Version : %1</translation>
+            <translation>Version: %1</translation>
         </message>
         <message>
             <source>Quit</source>
@@ -53,7 +53,7 @@
         </message>
         <message>
             <source>Are you sure you want to quit?</source>
-            <translation>Êtes-vous sûr de vouloir quitter ?</translation>
+            <translation>Êtes-vous sûr de vouloir quitter?</translation>
         </message>
         <message>
             <source>&amp;Yes</source>
@@ -73,15 +73,19 @@
         </message>
         <message>
           <source>Shortcut:</source>
-          <translation>Raccourci :</translation>
+          <translation>Raccourci:</translation>
         </message>
         <message>
-          <source>OpenAI API key:</source>
-          <translation>Clé API OpenAI :</translation>
+            <source>Model:</source>
+            <translation>Modèle:</translation>
+        </message>
+        <message>
+          <source>API key:</source>
+          <translation>Clé API:</translation>
         </message>
         <message>
           <source>Prompt:</source>
-          <translation>Invite :</translation>
+          <translation>Invite:</translation>
         </message>
     </context>
 </TS>

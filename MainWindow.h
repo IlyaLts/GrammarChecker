@@ -40,6 +40,13 @@ QT_END_NAMESPACE
 
 class UnhidableMenu;
 
+struct ModelProvider
+{
+    QString url;
+    QString key;
+    QSet<QString> models;
+};
+
 /*
 ===========================================================
 
@@ -79,7 +86,9 @@ private Q_SLOTS:
     void toggleLaunchOnStartup();
     void toggleShowInTray();
     void openConfig();
-    void keyChanged(const QKeySequence &keySequence);
+    void keySequenceChanged(const QKeySequence &keySequence);
+    void keyChanged(const QString &key);
+    void modelChanged(int index);
 
 private:
 
@@ -95,6 +104,7 @@ private:
     QIcon iconMain;
     QIcon iconSettings;
 
+    QMap<QString, ModelProvider> providers;
     QList<QAction *> languageActions;
     QAction *notificationSoundAction;
     QAction *smoothTypingAction;
@@ -111,9 +121,6 @@ private:
     UnhidableMenu *languageMenu;
 
     QSoundEffect notification;
-
-    QString model;
-
     QLocale::Language language;
     bool appInitiated = false;
     int smoothTypingDelay = SMOOTH_TYPING_DELAY;
