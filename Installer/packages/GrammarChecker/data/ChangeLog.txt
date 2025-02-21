@@ -1,4 +1,10 @@
 ==========================
+1.2 - Feb 21, 2025
+==========================
+- Added profiles for different custom grammar checking.
+- Added an ability to enable or disable profiles.
+
+==========================
 1.1 - Feb 10, 2025
 ==========================
 - Added support for custom APIs, such as Google's Gemini models.

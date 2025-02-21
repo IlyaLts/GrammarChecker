@@ -25,7 +25,7 @@
 
 #define gcApp (static_cast<Application *>(QCoreApplication::instance()))
 
-#define GRAMMAR_CHECKER_VERSION     "1.1"
+#define GRAMMAR_CHECKER_VERSION     "1.2"
 #define SETTINGS_FILENAME           "Settings.ini"
 
 struct Language

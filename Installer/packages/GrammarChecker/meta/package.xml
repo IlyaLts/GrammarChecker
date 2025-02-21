@@ -2,8 +2,8 @@
 <Package>
     <DisplayName>Grammar Checker</DisplayName>
     <Description>Grammar checker for any text field via keyboard shortcut using LLM</Description>
-    <Version>1.1</Version>
-    <ReleaseDate>2025-02-10</ReleaseDate>
+    <Version>1.2</Version>
+    <ReleaseDate>2025-02-21</ReleaseDate>
     <Checkable>false</Checkable>
     <ForcedInstallation>true</ForcedInstallation>
     <ForcedUpdate>true</ForcedUpdate>
