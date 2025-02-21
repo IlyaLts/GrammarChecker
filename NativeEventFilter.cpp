@@ -43,21 +43,24 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
     {
         if (window)
         {
-            for (int i = 0; i < window->keySequence().count(); i++)
+            static QMutex mutex;
+
+            for (int i = 0; i < NUMBER_OF_TABS; i++)
             {
-                UINT modifier = toNativeModifier(window->keySequence()[i].keyboardModifiers());
-                UINT virtualKey = toNativeKey(window->keySequence()[i].key());
-
-                if (modifier == LOWORD(msg->lParam) && virtualKey == HIWORD(msg->lParam))
+                for (int j = 0; j < window->keySequence(i).count(); j++)
                 {
-                    static QMutex mutex;
+                    UINT modifier = toNativeModifier(window->keySequence(i)[j].keyboardModifiers());
+                    UINT virtualKey = toNativeKey(window->keySequence(i)[j].key());
 
-                    if (!mutex.tryLock())
+                    if (modifier == LOWORD(msg->lParam) && virtualKey == HIWORD(msg->lParam))
+                    {
+                        if (!mutex.tryLock())
+                            return true;
+
+                        window->checkGrammar(i);
+                        mutex.unlock();
                         return true;
-
-                    window->checkGrammar();
-                    mutex.unlock();
-                    return true;
+                    }
                 }
             }
         }

@@ -34,13 +34,18 @@
 #include <QClipboard>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QLabel>
+#include <QKeySequenceEdit>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QVBoxLayout>
+#include <liboai.h>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wextra"
 #pragma GCC diagnostic ignored "-Wreorder"
 #pragma GCC diagnostic ignored "-Wunused-variable"
-
-#include <liboai.h>
 
 #pragma GCC diagnostic pop
 
@@ -50,8 +55,8 @@ const char *defaultPrompt = "Correct text for grammar, syntax, and punctuation, 
                             "preserving the original meaning and tone. Use clear, "
                             "polite language, avoid unnecessary changes and complex vocabulary.";
 
-const char *finalPrompt = "Don't ask for clarification, simply provide the updated "
-                          "text, without any introductions or additions. Text to correct: ";
+const char *hiddenPrompt = "Don't ask for clarification, simply provide the updated "
+                           "text, without any introductions or additions. Text to correct: ";
 
 /*
 ===================
@@ -67,9 +72,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     notification.setSource(QUrl::fromLocalFile("sounds/notification.wav"));
 
-    connect(ui->shortcutEdit, QKeySequenceEdit::keySequenceChanged, this, &MainWindow::keySequenceChanged);
-    connect(ui->keyLineEdit, QLineEdit::textChanged, this, &MainWindow::keyChanged);
-    connect(ui->modelComboBox, QComboBox::activated, this, &MainWindow::modelChanged);
+    for (int i = 0; i < NUMBER_OF_TABS; i++)
+    {
+        profiles[i] = new Profile();
+        ui->tabWidget->addTab(profiles[i], tr("Profile") + " " + QString::number(i + 1));
+    }
 
     setupMenus();
     readSettings();
@@ -116,21 +123,23 @@ void MainWindow::show()
 MainWindow::checkGrammar
 ===================
 */
-void MainWindow::checkGrammar()
+void MainWindow::checkGrammar(int id)
 {
     QClipboard *clipboard = QApplication::clipboard();
     QString savedClipboard = clipboard->text();
 
     cutToClipboard();
 
-    auto modelData = ui->modelComboBox->currentData().value<QPair<QString, ModelProvider *>>();
+    auto modelData = profiles[id]->currentModel();
+
     QString modelName = modelData.first;
     ModelProvider *model = modelData.second;
     OpenAI oai(model->url.toUtf8().data());
     Conversation convo;
     QString output;
-    QString prompt = ui->promptTextEdit->toPlainText();
-    prompt.append(finalPrompt);
+    QString prompt = profiles[id]->prompt();
+
+    prompt.append(hiddenPrompt);
     prompt.append(clipboard->text());
 
     if (!convo.AddUserData(prompt.toUtf8().data()))
@@ -139,7 +148,7 @@ void MainWindow::checkGrammar()
         return;
     }
 
-    if (oai.auth.SetKey(ui->keyLineEdit->text().toUtf8().data()))
+    if (oai.auth.SetKey(profiles[id]->key().toUtf8().data()))
     {
 #if 0
         // Lists the currently available models
@@ -190,16 +199,6 @@ void MainWindow::checkGrammar()
 
     if (notificationSoundAction->isChecked())
         notification.play();
-}
-
-/*
-===================
-MainWindow::keySequence
-===================
-*/
-QKeySequence MainWindow::keySequence() const
-{
-    return ui->shortcutEdit->keySequence();
 }
 
 /*
@@ -358,54 +357,6 @@ void MainWindow::openConfig()
 
 /*
 ===================
-MainWindow::keySequenceChanged
-===================
-*/
-void MainWindow::keySequenceChanged(const QKeySequence &keySequence)
-{
-    // Translates shortcut field placeholder
-    if (keySequence.isEmpty())
-        retranslate();
-
-    for (int i = 0; i < 4; i++)
-        unregisterShortcut(i);
-
-    for (int i = 0; i < keySequence.count(); i++)
-        registerShortcut(i, keySequence[i]);
-
-    ui->shortcutEdit->clearFocus();
-}
-
-/*
-===================
-MainWindow::keyChanged
-===================
-*/
-void MainWindow::keyChanged(const QString &key)
-{
-    if (!ui->modelComboBox->count())
-        return;
-
-    ui->modelComboBox->currentData().value<QPair<QString, ModelProvider *>>().second->key = key;
-}
-
-/*
-===================
-MainWindow::modelChanged
-===================
-*/
-void MainWindow::modelChanged(int index)
-{
-    Q_UNUSED(index);
-
-    if (!ui->modelComboBox->count())
-        return;
-
-    ui->keyLineEdit->setText(ui->modelComboBox->currentData().value<QPair<QString, ModelProvider *>>().second->key);
-}
-
-/*
-===================
 MainWindow::setupMenus
 ===================
 */
@@ -498,7 +449,6 @@ void MainWindow::readSettings()
     QSettings settings(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/" + SETTINGS_FILENAME, QSettings::IniFormat);
 
     providers.clear();
-    ui->modelComboBox->clear();
 
     resize(QSize(settings.value("Width", 500).toInt(), settings.value("Height", 300).toInt()));
     setWindowState(settings.value("Fullscreen", false).toBool() ? Qt::WindowMaximized : Qt::WindowActive);
@@ -509,8 +459,6 @@ void MainWindow::readSettings()
     bool showInTray = settings.value("ShowInTray", QSystemTrayIcon::isSystemTrayAvailable()).toBool();
     showInTrayAction->setChecked(showInTray);
     language = static_cast<QLocale::Language>(settings.value("Language", QLocale::system().language()).toInt());
-    ui->shortcutEdit->setKeySequence(QKeySequence(settings.value("Shortcut", QKeySequence(DEFAULT_SHORTCUT_KEY)).toString()));
-    ui->promptTextEdit->setText(settings.value("Prompt", defaultPrompt).toString());
     smoothTypingDelay = settings.value("SmoothTypingDelay", SMOOTH_TYPING_DELAY).toInt();
 
     providers.insert("OpenAI", { "https://api.openai.com/v1", "", {"gpt-4o-mini"} });
@@ -544,26 +492,11 @@ void MainWindow::readSettings()
         settings.endGroup();
     }
 
-    // Model combo box
-    for (auto it = providers.begin(); it != providers.end(); it++)
-        for (auto &model : it.value().models)
-            ui->modelComboBox->addItem(it.key() + "/" + model, QVariant::fromValue(QPair(model, &it.value())));
-
-    // Loads the last-used model
-    if (ui->modelComboBox->count())
+    for (int i = 0; i < NUMBER_OF_TABS; i++)
     {
-        auto model = ui->modelComboBox->currentData().value<QPair<QString, ModelProvider *>>();
-        QString currentModel = settings.value("CurrentModel").toString();
-
-        int index = ui->modelComboBox->findText(currentModel);
-
-        if (index >= 0)
-            ui->modelComboBox->setCurrentIndex(index);
+        profiles[i]->setProviders(providers);
+        profiles[i]->readSettings();
     }
-
-    // Key line edit
-    if (ui->modelComboBox->count())
-        ui->keyLineEdit->setText(ui->modelComboBox->currentData().value<QPair<QString, ModelProvider *>>().second->key);
 }
 
 /*
@@ -590,8 +523,6 @@ void MainWindow::writeSettings() const
     settings.setValue("SmoothTyping", smoothTypingAction->isChecked());
     settings.setValue("ShowInTray", showInTrayAction->isChecked());
     settings.setValue("Language", language);
-    settings.setValue("Shortcut", ui->shortcutEdit->keySequence());
-    settings.setValue("Prompt", ui->promptTextEdit->toPlainText());
     settings.setValue("SmoothTypingDelay", smoothTypingDelay);
 
     // Models
@@ -609,8 +540,8 @@ void MainWindow::writeSettings() const
         settings.endGroup();
     }
 
-    if (ui->modelComboBox->count())
-        settings.setValue("CurrentModel", ui->modelComboBox->currentText());
+    for (int i = 0; i < NUMBER_OF_TABS; i++)
+        profiles[i]->writeSettings();
 }
 
 /*
@@ -631,11 +562,9 @@ void MainWindow::retranslate()
     quitAction->setText(tr("&Quit"));
     version->setText(QString(tr("Version: %1")).arg(GRAMMAR_CHECKER_VERSION));
 
-    ui->shortcutLabel->setText(tr("Shortcut:"));
-    ui->modelLabel->setText(tr("Model:"));
-    ui->keyLabel->setText(tr("API key:"));
-    ui->promptLabel->setText(tr("Prompt:"));
+    for (int i = 0; i < ui->tabWidget->count(); i++)
+        ui->tabWidget->setTabText(i, tr("Profile") + " " + QString::number(i + 1));
 
-    if (QLineEdit *lineEdit = ui->shortcutEdit->findChild<QLineEdit *>("qt_keysequenceedit_lineedit"))
-        lineEdit->setPlaceholderText(tr("Press shortcut"));
+    for (int i = 0; i < NUMBER_OF_TABS; i++)
+        profiles[i]->retranslate();
 }

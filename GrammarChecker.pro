@@ -20,6 +20,7 @@ SOURCES += \
     Main.cpp \
     MainWindow.cpp \
     NativeEventFilter.cpp \
+    Profile.cpp \
     UnhidableMenu.cpp
 
 HEADERS += \
@@ -27,6 +28,7 @@ HEADERS += \
     Common.h \
     MainWindow.h \
     NativeEventFilter.h \
+    Profile.h \
     UnhidableMenu.h
 
 FORMS += \

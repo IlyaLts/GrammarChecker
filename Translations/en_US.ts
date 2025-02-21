@@ -87,5 +87,9 @@
             <source>Prompt:</source>
             <translation>Prompt:</translation>
         </message>
+        <message>
+            <source>Profile</source>
+            <translation>Profile</translation>
+        </message>
     </context>
 </TS>

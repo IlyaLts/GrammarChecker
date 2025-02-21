@@ -22,17 +22,18 @@
 
 #include "Application.h"
 #include "NativeEventFilter.h"
+#include "Profile.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QTimer>
 #include <QSoundEffect>
 
-#define DEFAULT_SHORTCUT_KEY    "CTRL+F12"
 #define DEFAULT_MODEL           "gpt-4o-mini"
-#define SMOOTH_TYPING_DELAY      25
+#define SMOOTH_TYPING_DELAY     25
+#define NUMBER_OF_TABS          4
 
 extern const char *defaultPrompt;
-extern const char *finalPrompt;
+extern const char *hiddenPrompt;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -63,8 +64,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void checkGrammar();
-    QKeySequence keySequence() const;
+    void checkGrammar(int id);
+    QKeySequence keySequence(int id) const { return profiles[id]->keySequence(); };
 
 public Q_SLOTS:
 
@@ -86,9 +87,6 @@ private Q_SLOTS:
     void toggleLaunchOnStartup();
     void toggleShowInTray();
     void openConfig();
-    void keySequenceChanged(const QKeySequence &keySequence);
-    void keyChanged(const QString &key);
-    void modelChanged(int index);
 
 private:
 
@@ -104,6 +102,7 @@ private:
     QIcon iconMain;
     QIcon iconSettings;
 
+    Profile *profiles[NUMBER_OF_TABS];
     QMap<QString, ModelProvider> providers;
     QList<QAction *> languageActions;
     QAction *notificationSoundAction;

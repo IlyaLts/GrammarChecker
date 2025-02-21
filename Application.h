@@ -39,6 +39,13 @@ struct Language
 extern Language defaultLanguage;
 extern Language languages[];
 
+/*
+===========================================================
+
+    Application
+
+===========================================================
+*/
 class Application : public QApplication
 {
 public:

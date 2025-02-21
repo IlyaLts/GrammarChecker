@@ -87,5 +87,9 @@
           <source>Prompt:</source>
           <translation>提示：</translation>
         </message>
+        <message>
+            <source>Profile</source>
+            <translation>个人资料</translation>
+        </message>
     </context>
 </TS>
