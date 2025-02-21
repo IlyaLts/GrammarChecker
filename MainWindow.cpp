@@ -468,7 +468,8 @@ void MainWindow::readSettings()
                                                                                            "gemini-1.5-flash-8b",
                                                                                            "gemini-1.5-pro" } });
 
-    //providers.insert("DeepSeek", { "https://api.deepseek.com", "", { "deepseek-chat" } });
+    providers.insert("DeepSeek", { "https://api.deepseek.com", "", { "deepseek-chat" } });
+    providers.insert("xAI", { "https://api.x.ai/v1", "", { "grok-2-1212", "grok-2-latest" } });
 
     // Loads models
     for (auto &provider : settings.childGroups())

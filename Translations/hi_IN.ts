@@ -91,5 +91,9 @@
             <source>Profile</source>
             <translation>प्रोफ़ाइल</translation>
         </message>
+        <message>
+            <source>Enable</source>
+            <translation>सक्षम करें</translation>
+        </message>
     </context>
 </TS>

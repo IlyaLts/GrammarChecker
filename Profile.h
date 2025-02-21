@@ -26,6 +26,7 @@
 #include <QLineEdit>
 #include <QTextEdit>
 
+class QCheckBox;
 class QVBoxLayout;
 class ModelProvider;
 class QLabel;
@@ -58,6 +59,7 @@ public:
 
 private Q_SLOTS:
 
+    void enableStateChanged(Qt::CheckState state);
     void keySequenceChanged(const QKeySequence &keySequence);
     void keyChanged(const QString &key);
     void modelChanged();
@@ -67,6 +69,7 @@ private:
     static int nextId;
 
     int id;
+    QCheckBox *enableCheckBox;
     QVBoxLayout *tabLayout;
     QLabel *shortcutLabel;
     QKeySequenceEdit *shortcutEdit;

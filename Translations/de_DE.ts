@@ -91,5 +91,9 @@
             <source>Profile</source>
             <translation>Profil</translation>
         </message>
+        <message>
+            <source>Enable</source>
+            <translation>Aktivieren</translation>
+        </message>
     </context>
 </TS>

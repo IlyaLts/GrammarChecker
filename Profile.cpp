@@ -22,6 +22,7 @@
 #include "MainWindow.h"
 #include <QSettings>
 #include <QStandardPaths>
+#include <QCheckBox>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QKeySequenceEdit>
@@ -43,6 +44,7 @@ Profile::Profile(QWidget* parent) : QWidget(parent)
 
     tabLayout = new QVBoxLayout;
 
+    enableCheckBox = new QCheckBox;
     shortcutLabel = new QLabel;
     shortcutEdit = new QKeySequenceEdit;
     modelLabel = new QLabel;
@@ -52,6 +54,7 @@ Profile::Profile(QWidget* parent) : QWidget(parent)
     promptLabel = new QLabel;
     promptTextEdit = new QTextEdit;
 
+    tabLayout->addWidget(enableCheckBox);
     tabLayout->addWidget(shortcutLabel);
     tabLayout->addWidget(shortcutEdit);
     tabLayout->addWidget(modelLabel);
@@ -61,6 +64,7 @@ Profile::Profile(QWidget* parent) : QWidget(parent)
     tabLayout->addWidget(promptLabel);
     tabLayout->addWidget(promptTextEdit);
 
+    enableCheckBox->setChecked(true);
     shortcutEdit->setClearButtonEnabled(true);
     shortcutEdit->setMaximumSequenceLength(4);
     modelComboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
@@ -69,6 +73,7 @@ Profile::Profile(QWidget* parent) : QWidget(parent)
 
     setLayout(tabLayout);
 
+    connect(enableCheckBox, QCheckBox::checkStateChanged, this, &Profile::enableStateChanged);
     connect(shortcutEdit, QKeySequenceEdit::keySequenceChanged, this, &Profile::keySequenceChanged);
     connect(keyLineEdit, QLineEdit::textChanged, this, &Profile::keyChanged);
     connect(modelComboBox, QComboBox::activated, this, &Profile::modelChanged);
@@ -95,6 +100,7 @@ Profile::retranslate
 */
 void Profile::retranslate()
 {
+    enableCheckBox->setText(QCoreApplication::translate("MainWindow", "Enable"));
     shortcutLabel->setText(QCoreApplication::translate("MainWindow", "Shortcut:"));
     modelLabel->setText(QCoreApplication::translate("MainWindow", "Model:"));
     keyLabel->setText(QCoreApplication::translate("MainWindow", "API key:"));
@@ -130,6 +136,8 @@ void Profile::readSettings()
         // Key line edit
         keyLineEdit->setText(modelComboBox->currentData().value<QPair<QString, ModelProvider *>>().second->key);
     }
+
+    enableCheckBox->setChecked(settings.value("Profile" + QString::number(id) + "_Enabled", true).toBool());
 }
 
 /*
@@ -146,6 +154,44 @@ void Profile::writeSettings() const
 
     if (modelComboBox->count())
         settings.setValue("CurrentModel" + QString::number(id), modelComboBox->currentText());
+
+    settings.setValue("Profile" + QString::number(id) + "_Enabled", enableCheckBox->isChecked());
+}
+
+/*
+===================
+Profile::enableStateChanged
+===================
+*/
+void Profile::enableStateChanged(Qt::CheckState state)
+{
+    bool enable;
+
+    int offset = id * NUMBER_OF_TABS;
+
+    if (state == Qt::Unchecked)
+    {
+        enable = false;
+
+        for (int i = 0; i < 4; i++)
+            unregisterShortcut(offset + i);
+    }
+    else if (state == Qt::Checked)
+    {
+        enable = true;
+
+        for (int i = 0; i < shortcutEdit->keySequence().count(); i++)
+            registerShortcut(offset + i, shortcutEdit->keySequence()[i]);
+    }
+
+    shortcutLabel->setEnabled(enable);
+    shortcutEdit->setEnabled(enable);
+    modelLabel->setEnabled(enable);
+    modelComboBox->setEnabled(enable);
+    keyLabel->setEnabled(enable);
+    keyLineEdit->setEnabled(enable);
+    promptLabel->setEnabled(enable);
+    promptTextEdit->setEnabled(enable);
 }
 
 /*
@@ -159,13 +205,13 @@ void Profile::keySequenceChanged(const QKeySequence &keySequence)
     if (keySequence.isEmpty())
         retranslate();
 
-    int j = id * NUMBER_OF_TABS;
+    int offset = id * NUMBER_OF_TABS;
 
     for (int i = 0; i < 4; i++)
-        unregisterShortcut(j + i);
+        unregisterShortcut(offset + i);
 
     for (int i = 0; i < keySequence.count(); i++)
-        registerShortcut(j + i, keySequence[i]);
+        registerShortcut(offset + i, keySequence[i]);
 
     shortcutEdit->clearFocus();
 }

@@ -91,5 +91,9 @@
             <source>Profile</source>
             <translation>プロフィール</translation>
         </message>
+        <message>
+            <source>Enable</source>
+            <translation>有効にする</translation>
+        </message>
     </context>
 </TS>

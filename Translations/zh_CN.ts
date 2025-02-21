@@ -91,5 +91,9 @@
             <source>Profile</source>
             <translation>个人资料</translation>
         </message>
+        <message>
+            <source>Enable</source>
+            <translation>启用</translation>
+        </message>
     </context>
 </TS>
