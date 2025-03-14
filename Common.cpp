@@ -93,7 +93,7 @@ void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay)
                 return;
             }
 
-            Sleep(smoothPastingDelay);
+            Sleep(smoothPastingDelay / clipboard.length());
         }
     }
     else

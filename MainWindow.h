@@ -29,7 +29,7 @@
 #include <QSoundEffect>
 
 #define DEFAULT_MODEL           "gpt-4o-mini"
-#define SMOOTH_TYPING_DELAY     25
+#define SMOOTH_TYPING_DELAY     250
 #define NUMBER_OF_TABS          4
 
 extern const char *defaultPrompt;

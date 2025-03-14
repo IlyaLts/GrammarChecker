@@ -459,7 +459,7 @@ void MainWindow::readSettings()
     bool showInTray = settings.value("ShowInTray", QSystemTrayIcon::isSystemTrayAvailable()).toBool();
     showInTrayAction->setChecked(showInTray);
     language = static_cast<QLocale::Language>(settings.value("Language", QLocale::system().language()).toInt());
-    smoothTypingDelay = settings.value("SmoothTypingDelay", SMOOTH_TYPING_DELAY).toInt();
+    smoothTypingDelay = settings.value("SmoothTypingDynamicDelay", SMOOTH_TYPING_DELAY).toInt();
 
     providers.insert("OpenAI", { "https://api.openai.com/v1", "", {"gpt-4o-mini"} });
 
@@ -524,7 +524,7 @@ void MainWindow::writeSettings() const
     settings.setValue("SmoothTyping", smoothTypingAction->isChecked());
     settings.setValue("ShowInTray", showInTrayAction->isChecked());
     settings.setValue("Language", language);
-    settings.setValue("SmoothTypingDelay", smoothTypingDelay);
+    settings.setValue("SmoothTypingDynamicDelay", smoothTypingDelay);
 
     // Models
     for (auto it = providers.begin(); it != providers.end(); it++)
