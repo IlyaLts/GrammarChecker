@@ -31,7 +31,7 @@
 cutToClipboard
 ===================
 */
-void cutToClipboard()
+bool cutToClipboard()
 {
 #ifdef Q_OS_WIN
     INPUT inputs[4];
@@ -56,10 +56,13 @@ void cutToClipboard()
     if (SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT)) != ARRAYSIZE(inputs))
     {
         qDebug().nospace() << "SendInput failed: 0x" << HRESULT_FROM_WIN32(GetLastError());
-        return;
+        return false;
     }
 
-    gcApp->waitForClipboardChange();
+    if (!gcApp->waitForClipboardChange())
+        return false;
+
+    return true;
 #endif
 }
 

@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QSettings>
 #include <QClipboard>
+#include <QTime>
 
 Language defaultLanguage = { QLocale::English, QLocale::UnitedStates, ":/i18n/en_US.qm", "&English" };
 
@@ -61,12 +62,23 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 Application::waitForClipboardChange
 ===================
 */
-void Application::waitForClipboardChange()
+bool Application::waitForClipboardChange()
 {
-    m_clipboardChanged = true;
+    QTime dieTime = QTime::currentTime().addSecs(1);
+    m_clipboardChanged = false;
 
-    while (m_clipboardChanged)
+    while (!m_clipboardChanged)
+    {
+        if (QTime::currentTime() >= dieTime)
+            return false;
+
         QApplication::processEvents();
+    }
+
+    if (QApplication::clipboard()->text().isEmpty())
+        return false;
+
+    return true;
 }
 
 /*
@@ -180,5 +192,5 @@ Application::clipboardChanged
 */
 void Application::clipboardChanged()
 {
-    m_clipboardChanged = false;
+    m_clipboardChanged = true;
 }

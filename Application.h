@@ -52,7 +52,7 @@ public:
 
     Application(int &argc, char **argv);
 
-    void waitForClipboardChange();
+    bool waitForClipboardChange();
     void setLaunchOnStartup(bool enable);
     void setTranslator(QLocale::Language language);
 

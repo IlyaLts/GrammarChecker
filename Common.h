@@ -22,7 +22,7 @@
 
 #include <QKeySequence>
 
-void cutToClipboard();
+bool cutToClipboard();
 void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay);
 void registerShortcut(int id, const QKeyCombination &keyCombination);
 void unregisterShortcut(int id);

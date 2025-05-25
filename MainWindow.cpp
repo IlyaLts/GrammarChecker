@@ -128,7 +128,8 @@ void MainWindow::checkGrammar(int id)
     QClipboard *clipboard = QApplication::clipboard();
     QString savedClipboard = clipboard->text();
 
-    cutToClipboard();
+    if (!cutToClipboard())
+        return;
 
     auto modelData = profiles[id]->currentModel();
 
@@ -199,6 +200,7 @@ void MainWindow::checkGrammar(int id)
 
     if (notificationSoundAction->isChecked())
         notification.play();
+    qDebug("true");
 }
 
 /*
