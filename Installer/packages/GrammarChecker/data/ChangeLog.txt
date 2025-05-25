@@ -1,4 +1,10 @@
 ==========================
+1.2.1 - May 25, 2025
+==========================
+- Stopped checking when no text is selected.
+- Made smooth pasting dynamically adjust based on text size.
+
+==========================
 1.2 - Feb 21, 2025
 ==========================
 - Added profiles for different custom grammar checking.
