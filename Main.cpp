@@ -24,6 +24,10 @@
 #include <QSharedMemory>
 #include <QMessageBox>
 
+#ifdef Q_OS_WIN
+#include <synchapi.h>
+#endif
+
 /*
 ===================
 main
@@ -50,6 +54,12 @@ int main(int argc, char *argv[])
         QMessageBox::warning(NULL, title, text);
         return -1;
     }
+
+// Used by Inno setup to prevent the user from installing new versions of an application while
+// the application is still running, and to prevent the user from uninstalling a running application.
+#ifdef Q_OS_WIN
+    CreateMutexA(NULL, FALSE, "SyncManagerMutex");
+#endif
 
     if (QCoreApplication::arguments().contains("reset", Qt::CaseInsensitive))
     {
