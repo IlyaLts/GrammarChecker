@@ -36,6 +36,7 @@ Language languages[] =
         {QLocale::Hindi,        QLocale::India,         ":/i18n/hi_IN.qm", "&Hindi"},
         {QLocale::Italian,      QLocale::Italy,         ":/i18n/it_IT.qm", "&Italian"},
         {QLocale::Japanese,     QLocale::Japan,         ":/i18n/ja_JP.qm", "&Japanese"},
+        {QLocale::Korean,       QLocale::SouthKorea,    ":/i18n/ko_KR.qm", "&Korean"},
         {QLocale::Portuguese,   QLocale::Portugal,      ":/i18n/pt_PT.qm", "&Portuguese"},
         {QLocale::Russian,      QLocale::Russia,        ":/i18n/ru_RU.qm", "&Russian"},
         {QLocale::Spanish,      QLocale::Spain,         ":/i18n/es_ES.qm", "&Spanish"},
