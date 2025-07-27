@@ -48,10 +48,6 @@
             <translation>バージョン: %1</translation>
         </message>
         <message>
-            <source>Quit</source>
-            <translation>終了</translation>
-        </message>
-        <message>
             <source>Are you sure you want to quit?</source>
             <translation>本当に終了しますか？</translation>
         </message>

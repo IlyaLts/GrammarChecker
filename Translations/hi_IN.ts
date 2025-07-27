@@ -48,10 +48,6 @@
             <translation>संस्करण: %1</translation>
         </message>
         <message>
-            <source>Quit</source>
-            <translation>छोड़ें</translation>
-        </message>
-        <message>
             <source>Are you sure you want to quit?</source>
             <translation>क्या आप वाकई छोड़ना चाहते हैं?</translation>
         </message>

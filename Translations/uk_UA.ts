@@ -48,10 +48,6 @@
             <translation>Версія: %1</translation>
         </message>
         <message>
-            <source>Quit</source>
-            <translation>Вийти</translation>
-        </message>
-        <message>
             <source>Are you sure you want to quit?</source>
             <translation>Ви впевнені, що хочете вийти?</translation>
         </message>

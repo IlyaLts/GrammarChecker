@@ -48,10 +48,6 @@
             <translation>版本：%1</translation>
         </message>
         <message>
-            <source>Quit</source>
-            <translation>退出</translation>
-        </message>
-        <message>
             <source>Are you sure you want to quit?</source>
             <translation>您确定要退出吗？</translation>
         </message>

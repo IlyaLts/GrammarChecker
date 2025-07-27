@@ -48,10 +48,6 @@
             <translation>버전: %1</translation>
         </message>
         <message>
-            <source>Quit</source>
-            <translation>종료</translation>
-        </message>
-        <message>
             <source>Are you sure you want to quit?</source>
             <translation>정말 종료하시겠습니까?</translation>
         </message>

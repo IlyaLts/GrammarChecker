@@ -48,10 +48,6 @@
             <translation>Versione: %1</translation>
         </message>
         <message>
-            <source>Quit</source>
-            <translation>Esci</translation>
-        </message>
-        <message>
             <source>Are you sure you want to quit?</source>
             <translation>Sei sicuro di voler uscire?</translation>
         </message>
