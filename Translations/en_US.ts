@@ -12,36 +12,36 @@
             <translation>The app is already launched and cannot be launched as a second instance.</translation>
         </message>
         <message>
-            <source>&amp;Settings</source>
-            <translation>&amp;Settings</translation>
+            <source>Settings</source>
+            <translation>Settings</translation>
         </message>
         <message>
-            <source>&amp;Notification Sound</source>
-            <translation>&amp;Notification Sound</translation>
+            <source>Notification Sound</source>
+            <translation>Notification Sound</translation>
         </message>
         <message>
-            <source>&amp;Smooth Typing</source>
-            <translation>&amp;Smooth Typing</translation>
+            <source>Smooth Typing</source>
+            <translation>Smooth Typing</translation>
         </message>
         <message>
-            <source>&amp;Launch on Startup</source>
-            <translation>&amp;Launch on Startup</translation>
+            <source>Launch on Startup</source>
+            <translation>Launch on Startup</translation>
         </message>
         <message>
-            <source>&amp;Show in System Tray</source>
-            <translation>&amp;Show in System Tray</translation>
+            <source>Show in System Tray</source>
+            <translation>Show in System Tray</translation>
         </message>
         <message>
-            <source>&amp;Open Config</source>
-            <translation>&amp;Open Config</translation>
+            <source>Open Config</source>
+            <translation>Open Config</translation>
         </message>
         <message>
-            <source>&amp;Show</source>
-            <translation>&amp;Show</translation>
+            <source>Show</source>
+            <translation>Show</translation>
         </message>
         <message>
-            <source>&amp;Quit</source>
-            <translation>&amp;Quit</translation>
+            <source>Quit</source>
+            <translation>Quit</translation>
         </message>
         <message>
             <source>Version: %1</source>
@@ -56,16 +56,16 @@
             <translation>Are you sure you want to quit?</translation>
         </message>
         <message>
-            <source>&amp;Yes</source>
-            <translation>&amp;Yes</translation>
+            <source>Yes</source>
+            <translation>Yes</translation>
         </message>
         <message>
-            <source>&amp;No</source>
-            <translation>&amp;No</translation>
+            <source>No</source>
+            <translation>No</translation>
         </message>
         <message>
-            <source>&amp;Language</source>
-            <translation>&amp;Language</translation>
+            <source>Language</source>
+            <translation>Language</translation>
         </message>
         <message>
             <source>Press shortcut</source>

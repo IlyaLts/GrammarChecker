@@ -367,13 +367,13 @@ void MainWindow::setupMenus()
     iconMain.addFile(":/Icon.ico");
     iconSettings.addFile(":/Images/IconSettings.png");
 
-    notificationSoundAction = new QAction(tr("&Notification Sound"), this);
-    smoothTypingAction = new QAction(tr("&Smooth Typing"), this);
-    launchOnStartupAction = new QAction(tr("&Launch on Startup"), this);
-    showInTrayAction = new QAction(tr("&Show in System Tray"));
-    openConfigAction = new QAction(tr("&Open Config"));
-    showAction = new QAction(tr("&Show"), this);
-    quitAction = new QAction(tr("&Quit"), this);
+    notificationSoundAction = new QAction("&" + tr("Notification Sound"), this);
+    smoothTypingAction = new QAction("&" + tr("Smooth Typing"), this);
+    launchOnStartupAction = new QAction("&" + tr("Launch on Startup"), this);
+    showInTrayAction = new QAction("&" + tr("Show in System Tray"));
+    openConfigAction = new QAction("&" + tr("Open Config"));
+    showAction = new QAction("&" + tr("Show"), this);
+    quitAction = new QAction("&" + tr("Quit"), this);
     version = new QAction(QString(tr("Version: %1")).arg(GRAMMAR_CHECKER_VERSION), this);
 
     for (int i = 0; i < Application::languageCount(); i++)
@@ -395,12 +395,12 @@ void MainWindow::setupMenus()
     for (int i = 0; i < Application::languageCount(); i++)
         languageActions[i]->setCheckable(true);
 
-    languageMenu = new UnhidableMenu(tr("&Language"), this);
+    languageMenu = new UnhidableMenu("&" + tr("Language"), this);
 
     for (int i = 0; i < Application::languageCount(); i++)
         languageMenu->addAction(languageActions[i]);
 
-    settingsMenu = new UnhidableMenu(tr("&Settings"), this);
+    settingsMenu = new UnhidableMenu("&" + tr("Settings"), this);
     settingsMenu->setIcon(iconSettings);
     settingsMenu->addMenu(languageMenu);
     settingsMenu->addAction(notificationSoundAction);
@@ -556,15 +556,15 @@ MainWindow::retranslate
 */
 void MainWindow::retranslate()
 {
-    settingsMenu->setTitle(tr("&Settings"));
-    languageMenu->setTitle(tr("&Language"));
-    notificationSoundAction->setText(tr("&Notification Sound"));
-    smoothTypingAction->setText(tr("&Smooth Typing"));
-    launchOnStartupAction->setText(tr("&Launch on Startup"));
-    showInTrayAction->setText(tr("&Show in System Tray"));
-    openConfigAction->setText(tr("&Open Config"));
-    showAction->setText(tr("&Show"));
-    quitAction->setText(tr("&Quit"));
+    settingsMenu->setTitle("&" + tr("Settings"));
+    languageMenu->setTitle("&" + tr("Language"));
+    notificationSoundAction->setText("&" + tr("Notification Sound"));
+    smoothTypingAction->setText("&" + tr("Smooth Typing"));
+    launchOnStartupAction->setText("&" + tr("Launch on Startup"));
+    showInTrayAction->setText("&" + tr("Show in System Tray"));
+    openConfigAction->setText("&" + tr("Open Config"));
+    showAction->setText("&" + tr("Show"));
+    quitAction->setText("&" + tr("Quit"));
     version->setText(QString(tr("Version: %1")).arg(GRAMMAR_CHECKER_VERSION));
 
     for (int i = 0; i < ui->tabWidget->count(); i++)

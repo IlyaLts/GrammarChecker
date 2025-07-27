@@ -12,36 +12,36 @@
             <translation>앱이 이미 실행 중이므로 두 번째 인스턴스로 실행할 수 없습니다.</translation>
         </message>
         <message>
-            <source>&amp;Settings</source>
-            <translation>설정(&amp;S)</translation>
+            <source>Settings</source>
+            <translation>설정</translation>
         </message>
         <message>
-            <source>&amp;Notification Sound</source>
-            <translation>알림 소리(&amp;N)</translation>
+            <source>Notification Sound</source>
+            <translation>알림 소리</translation>
         </message>
         <message>
-            <source>&amp;Smooth Typing</source>
-            <translation>부드러운 타이핑(&amp;S)</translation>
+            <source>Smooth Typing</source>
+            <translation>부드러운 타이핑</translation>
         </message>
         <message>
-            <source>&amp;Launch on Startup</source>
-            <translation>시작 시 실행(&amp;L)</translation>
+            <source>Launch on Startup</source>
+            <translation>시작 시 실행</translation>
         </message>
         <message>
-            <source>&amp;Show in System Tray</source>
-            <translation>시스템 트레이에 표시(&amp;S)</translation>
+            <source>Show in System Tray</source>
+            <translation>시스템 트레이에 표시</translation>
         </message>
         <message>
-            <source>&amp;Open Config</source>
-            <translation>설정 열기(&amp;O)</translation>
+            <source>Open Config</source>
+            <translation>구성 열기</translation>
         </message>
         <message>
-            <source>&amp;Show</source>
-            <translation>표시(&amp;S)</translation>
+            <source>Show</source>
+            <translation>표시</translation>
         </message>
         <message>
-            <source>&amp;Quit</source>
-            <translation>종료(&amp;Q)</translation>
+            <source>Quit</source>
+            <translation>종료</translation>
         </message>
         <message>
             <source>Version: %1</source>
@@ -56,16 +56,16 @@
             <translation>정말 종료하시겠습니까?</translation>
         </message>
         <message>
-            <source>&amp;Yes</source>
-            <translation>예(&amp;Y)</translation>
+            <source>Yes</source>
+            <translation>예</translation>
         </message>
         <message>
-            <source>&amp;No</source>
-            <translation>아니요(&amp;N)</translation>
+            <source>No</source>
+            <translation>아니요</translation>
         </message>
         <message>
-            <source>&amp;Language</source>
-            <translation>언어(&amp;L)</translation>
+            <source>Language</source>
+            <translation>언어</translation>
         </message>
         <message>
             <source>Press shortcut</source>
