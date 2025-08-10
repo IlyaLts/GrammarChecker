@@ -374,6 +374,7 @@ void MainWindow::setupMenus()
     openConfigAction = new QAction("&" + tr("Open Config"));
     showAction = new QAction("&" + tr("Show"), this);
     quitAction = new QAction("&" + tr("Quit"), this);
+    reportBugAction = new QAction("&" + tr("Report a Bug"), this);
     version = new QAction(QString(tr("Version: %1")).arg(GRAMMAR_CHECKER_VERSION), this);
 
     for (int i = 0; i < Application::languageCount(); i++)
@@ -408,7 +409,9 @@ void MainWindow::setupMenus()
     settingsMenu->addAction(launchOnStartupAction);
     settingsMenu->addAction(showInTrayAction);
     settingsMenu->addSeparator();
-    settingsMenu->addAction(openConfigAction);
+    settingsMenu->addAction(openConfigAction);    
+    settingsMenu->addAction(reportBugAction);
+    settingsMenu->addSeparator();
     settingsMenu->addAction(version);
 
     trayIconMenu = new UnhidableMenu(this);
@@ -436,6 +439,7 @@ void MainWindow::setupMenus()
     connect(showAction, &QAction::triggered, this, std::bind(&MainWindow::trayIconActivated, this, QSystemTrayIcon::DoubleClick));
     connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+    connect(reportBugAction, &QAction::triggered, this, [this](){ QDesktopServices::openUrl(QUrl(BUG_TRACKER_LINK)); });
 
     for (int i = 0; i < Application::languageCount(); i++)
         connect(languageActions[i], &QAction::triggered, this, std::bind(&MainWindow::switchLanguage, this, languages[i].language));
@@ -565,6 +569,7 @@ void MainWindow::retranslate()
     openConfigAction->setText("&" + tr("Open Config"));
     showAction->setText("&" + tr("Show"));
     quitAction->setText("&" + tr("Quit"));
+    reportBugAction->setText("&" + tr("Report a Bug"));
     version->setText(QString(tr("Version: %1")).arg(GRAMMAR_CHECKER_VERSION));
 
     for (int i = 0; i < ui->tabWidget->count(); i++)

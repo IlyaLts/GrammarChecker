@@ -112,6 +112,7 @@ private:
     QAction *openConfigAction;
     QAction *showAction;
     QAction *quitAction;
+    QAction *reportBugAction;
     QAction *version;
 
     QSystemTrayIcon *trayIcon;

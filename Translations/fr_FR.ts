@@ -91,5 +91,9 @@
             <source>Enable</source>
             <translation>Activer</translation>
         </message>
+        <message>
+            <source>Report a Bug</source>
+            <translation>Signaler un bogue</translation>
+        </message>
     </context>
 </TS>

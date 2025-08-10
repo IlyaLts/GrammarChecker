@@ -27,6 +27,7 @@
 
 #define GRAMMAR_CHECKER_VERSION     "1.2.1"
 #define SETTINGS_FILENAME           "Settings.ini"
+#define BUG_TRACKER_LINK            "https://github.com/IlyaLts/GrammarChecker/issues"
 
 struct Language
 {

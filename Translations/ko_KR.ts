@@ -91,5 +91,9 @@
             <source>Enable</source>
             <translation>활성화</translation>
         </message>
+        <message>
+            <source>Report a Bug</source>
+            <translation>버그 보고</translation>
+        </message>
     </context>
 </TS>

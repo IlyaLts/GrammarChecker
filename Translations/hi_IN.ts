@@ -91,5 +91,9 @@
             <source>Enable</source>
             <translation>सक्षम करें</translation>
         </message>
+        <message>
+            <source>Report a Bug</source>
+            <translation>किसी समस्या की शिकायत करें</translation>
+        </message>
     </context>
 </TS>

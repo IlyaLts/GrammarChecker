@@ -91,5 +91,9 @@
             <source>Enable</source>
             <translation>有効にする</translation>
         </message>
+        <message>
+            <source>Report a Bug</source>
+            <translation>バグを報告</translation>
+        </message>
     </context>
 </TS>
