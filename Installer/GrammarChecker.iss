@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "GrammarChecker"
-#define MyAppVersion "1.2.1"
+#define MyAppVersion "1.2.2"
 #define MyAppURL "https://github.com/IlyaLts/GrammarChecker"
 #define MyAppExeName "GrammarChecker.exe"
 

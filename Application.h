@@ -25,7 +25,7 @@
 
 #define gcApp (static_cast<Application *>(QCoreApplication::instance()))
 
-#define GRAMMAR_CHECKER_VERSION     "1.2.1"
+#define GRAMMAR_CHECKER_VERSION     "1.2.2"
 #define SETTINGS_FILENAME           "Settings.ini"
 #define BUG_TRACKER_LINK            "https://github.com/IlyaLts/GrammarChecker/issues"
 

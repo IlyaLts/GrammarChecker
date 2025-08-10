@@ -165,7 +165,7 @@ Profile::enableStateChanged
 */
 void Profile::enableStateChanged(Qt::CheckState state)
 {
-    bool enable;
+    bool enable = false;
 
     int offset = id * NUMBER_OF_TABS;
 
