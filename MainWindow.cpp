@@ -149,6 +149,8 @@ void MainWindow::checkGrammar(int id)
         return;
     }
 
+    oai.auth.SetMaxTimeout(maxTimeout);
+
     if (oai.auth.SetKey(profiles[id]->key().toUtf8().data()))
     {
 #if 0
@@ -466,6 +468,7 @@ void MainWindow::readSettings()
     showInTrayAction->setChecked(showInTray);
     language = static_cast<QLocale::Language>(settings.value("Language", QLocale::system().language()).toInt());
     smoothTypingDelay = settings.value("SmoothTypingDynamicDelay", SMOOTH_TYPING_DELAY).toInt();
+    maxTimeout = settings.value("MaxTimeout", MAX_TIMEOUT).toInt();
 
     providers.insert("OpenAI", { "https://api.openai.com/v1", "", {"gpt-4o-mini", "gpt-5-mini", "gpt-5"} });
 
@@ -531,6 +534,7 @@ void MainWindow::writeSettings() const
     settings.setValue("ShowInTray", showInTrayAction->isChecked());
     settings.setValue("Language", language);
     settings.setValue("SmoothTypingDynamicDelay", smoothTypingDelay);
+    settings.setValue("MaxTimeout", maxTimeout);
 
     // Models
     for (auto it = providers.begin(); it != providers.end(); it++)

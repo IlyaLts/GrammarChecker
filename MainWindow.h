@@ -30,6 +30,7 @@
 
 #define DEFAULT_MODEL           "gpt-4o-mini"
 #define SMOOTH_TYPING_DELAY     250
+#define MAX_TIMEOUT             30000
 #define NUMBER_OF_TABS          4
 
 extern const char *defaultPrompt;
@@ -124,6 +125,7 @@ private:
     QLocale::Language language;
     bool appInitiated = false;
     int smoothTypingDelay = SMOOTH_TYPING_DELAY;
+    int32_t maxTimeout = 30000;
 };
 
 #endif // MAINWINDOW_H
