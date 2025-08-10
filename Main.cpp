@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 // Used by Inno setup to prevent the user from installing new versions of an application while
 // the application is still running, and to prevent the user from uninstalling a running application.
 #ifdef Q_OS_WIN
-    CreateMutexA(NULL, FALSE, "SyncManagerMutex");
+    CreateMutexA(NULL, FALSE, "GrammarCheckerMutex");
 #endif
 
     if (QCoreApplication::arguments().contains("reset", Qt::CaseInsensitive))

@@ -10,7 +10,7 @@
 ; SignTool=signtool
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{87B6CAC9-49B2-493F-8576-BBF95CFDF095}
+AppId={{17F71C27-A357-41A5-A568-8803228D0F28}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppMutex=GrammarCheckerMutex
