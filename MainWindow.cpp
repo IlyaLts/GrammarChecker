@@ -467,17 +467,15 @@ void MainWindow::readSettings()
     language = static_cast<QLocale::Language>(settings.value("Language", QLocale::system().language()).toInt());
     smoothTypingDelay = settings.value("SmoothTypingDynamicDelay", SMOOTH_TYPING_DELAY).toInt();
 
-    providers.insert("OpenAI", { "https://api.openai.com/v1", "", {"gpt-4o-mini"} });
+    providers.insert("OpenAI", { "https://api.openai.com/v1", "", {"gpt-4o-mini", "gpt-5-mini", "gpt-5"} });
 
     providers.insert("Google", { "https://generativelanguage.googleapis.com/v1beta", "", { "gemini-2.5-flash",
 																						   "gemini-2.5-pro",
-																						   "gemini-2.0-flash",
-                                                                                           "gemini-1.5-flash",
-                                                                                           "gemini-1.5-flash-8b",
-                                                                                           "gemini-1.5-pro" } });
+                                                                                           "gemini-2.0-flash",
+                                                                                           "gemini-2.5-flash-lite" } });
 
     providers.insert("DeepSeek", { "https://api.deepseek.com", "", { "deepseek-chat" } });
-    providers.insert("xAI", { "https://api.x.ai/v1", "", { "grok-2-1212", "grok-2-latest" } });
+    providers.insert("xAI", { "https://api.x.ai/v1", "", { "grok-3-mini", "grok-3", "grok-4-0709" } });
 
     // Loads models
     for (auto &provider : settings.childGroups())
