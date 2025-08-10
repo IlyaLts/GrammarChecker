@@ -1,4 +1,12 @@
 ==========================
+1.2.2 - Aug 10, 2025
+==========================
+- New installer.
+- Added max timeout setting in config.
+- Added korean language support.
+- Updated models.
+
+==========================
 1.2.1 - May 25, 2025
 ==========================
 - Stopped checking when no text is selected.
