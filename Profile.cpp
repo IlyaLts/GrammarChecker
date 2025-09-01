@@ -121,6 +121,7 @@ void Profile::readSettings()
 
     shortcutEdit->setKeySequence(QKeySequence(settings.value("Shortcut" + QString::number(id)).toString()));
     promptTextEdit->setText(settings.value("Prompt" + QString::number(id), defaultPrompt).toString());
+    m_hiddenPrompt.assign(settings.value("HiddenPrompt" + QString::number(id), ::hiddenPrompt).toString());
 
     if (modelComboBox->count())
     {
@@ -151,6 +152,7 @@ void Profile::writeSettings() const
 
     settings.setValue("Shortcut" + QString::number(id), shortcutEdit->keySequence());
     settings.setValue("Prompt" + QString::number(id), promptTextEdit->toPlainText());
+    settings.setValue("HiddenPrompt" + QString::number(id), m_hiddenPrompt);
 
     if (modelComboBox->count())
         settings.setValue("CurrentModel" + QString::number(id), modelComboBox->currentText());

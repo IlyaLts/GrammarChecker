@@ -28,7 +28,6 @@
 #include <QTimer>
 #include <QSoundEffect>
 
-#define DEFAULT_MODEL           "gpt-4o-mini"
 #define SMOOTH_TYPING_DELAY     250
 #define MAX_TIMEOUT             30000
 #define NUMBER_OF_TABS          4

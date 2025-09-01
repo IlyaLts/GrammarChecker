@@ -140,7 +140,7 @@ void MainWindow::checkGrammar(int id)
     QString output;
     QString prompt = profiles[id]->prompt();
 
-    prompt.append(hiddenPrompt);
+    prompt.append(profiles[id]->hiddenPrompt());
     prompt.append(clipboard->text());
 
     if (!convo.AddUserData(prompt.toUtf8().data()))

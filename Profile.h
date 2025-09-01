@@ -56,6 +56,7 @@ public:
     inline QKeySequence keySequence() const { return shortcutEdit->keySequence(); }
     inline QString key() const { return keyLineEdit->text(); }
     inline QString prompt() const { return promptTextEdit->toPlainText(); }
+    inline const QString & hiddenPrompt() const { return m_hiddenPrompt; }
 
 private Q_SLOTS:
 
@@ -79,6 +80,7 @@ private:
     QLineEdit *keyLineEdit;
     QLabel *promptLabel;
     QTextEdit *promptTextEdit;
+    QString m_hiddenPrompt;
 };
 
 #endif // PROFILE_H
