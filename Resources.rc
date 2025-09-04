@@ -3,14 +3,14 @@
 #include <richedit.h>
 
 #define VER_FILEDESCRIPTION_STR		"Grammar Checker"
-#define VER_FILEVERSION             1,2,2,0
-#define VER_FILEVERSION_STR         "1.2.2"
+#define VER_FILEVERSION             1,2,3,0
+#define VER_FILEVERSION_STR         "1.2.3"
 #define VER_INTERNALNAME_STR		"GrammarChecker"
 #define VER_LEGALCOPYRIGHT_STR 		"Copyright (C) 2025 Ilya Lyakhovets"
 #define VER_ORIGINALFILENAME_STR	"GrammarChecker.exe"
 #define VER_PRODUCTNAME_STR         "GrammarChecker"
-#define VER_PRODUCTVERSION          1,2,2
-#define VER_PRODUCTVERSION_STR      "1.2.2"
+#define VER_PRODUCTVERSION          1,2,3
+#define VER_PRODUCTVERSION_STR      "1.2.3"
 
 #ifndef DEBUG
 #define VER_DEBUG                   0
