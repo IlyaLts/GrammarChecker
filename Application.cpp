@@ -28,19 +28,22 @@
 Language defaultLanguage = { QLocale::English, QLocale::UnitedStates, ":/i18n/en_US.qm", "&English" };
 
 Language languages[] =
-    {
-        {QLocale::Chinese,      QLocale::China,         ":/i18n/zh_CN.qm", "&Chinese"},
-        {QLocale::English,      QLocale::UnitedStates,  ":/i18n/en_US.qm", "&English"},
-        {QLocale::French,       QLocale::France,        ":/i18n/fr_FR.qm", "&French"},
-        {QLocale::German,       QLocale::Germany,       ":/i18n/de_DE.qm", "&German"},
-        {QLocale::Hindi,        QLocale::India,         ":/i18n/hi_IN.qm", "&Hindi"},
-        {QLocale::Italian,      QLocale::Italy,         ":/i18n/it_IT.qm", "&Italian"},
-        {QLocale::Japanese,     QLocale::Japan,         ":/i18n/ja_JP.qm", "&Japanese"},
-        {QLocale::Korean,       QLocale::SouthKorea,    ":/i18n/ko_KR.qm", "&Korean"},
-        {QLocale::Portuguese,   QLocale::Portugal,      ":/i18n/pt_PT.qm", "&Portuguese"},
-        {QLocale::Russian,      QLocale::Russia,        ":/i18n/ru_RU.qm", "&Russian"},
-        {QLocale::Spanish,      QLocale::Spain,         ":/i18n/es_ES.qm", "&Spanish"},
-        {QLocale::Ukrainian,    QLocale::Ukraine,       ":/i18n/uk_UA.qm", "&Ukrainian"}
+{
+    {QLocale::Chinese,      QLocale::China,         ":/i18n/zh_CN.qm",  "&Chinese"},
+    {QLocale::Danish,       QLocale::Denmark,       ":/i18n/da_DK.qm",  "&Danish"},
+    {QLocale::English,      QLocale::UnitedStates,  ":/i18n/en_US.qm",  "&English"},
+    {QLocale::French,       QLocale::France,        ":/i18n/fr_FR.qm",  "&French"},
+    {QLocale::German,       QLocale::Germany,       ":/i18n/de_DE.qm",  "&German"},
+    {QLocale::Hindi,        QLocale::India,         ":/i18n/hi_IN.qm",  "&Hindi"},
+    {QLocale::Italian,      QLocale::Italy,         ":/i18n/it_IT.qm",  "&Italian"},
+    {QLocale::Japanese,     QLocale::Japan,         ":/i18n/ja_JP.qm",  "&Japanese"},
+    {QLocale::Korean,       QLocale::SouthKorea,    ":/i18n/ko_KR.qm",  "&Korean"},
+    {QLocale::Polish,       QLocale::Poland,        ":/i18n/pl_PL.qm",  "&Polish"},
+    {QLocale::Portuguese,   QLocale::Portugal,      ":/i18n/pt_PT.qm",  "&Portuguese"},
+    {QLocale::Russian,      QLocale::Russia,        ":/i18n/ru_RU.qm",  "&Russian"},
+    {QLocale::Spanish,      QLocale::Spain,         ":/i18n/es_ES.qm",  "&Spanish"},
+    {QLocale::Turkish,      QLocale::Turkey,        ":/i18n/tr_TR.qm",  "&Turkish"},
+    {QLocale::Ukrainian,    QLocale::Ukraine,       ":/i18n/uk_UA.qm",  "&Ukrainian"}
 };
 
 /*
