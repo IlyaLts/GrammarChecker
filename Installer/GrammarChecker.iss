@@ -79,7 +79,7 @@ Filename: "{app}\{#MyAppExeName}"; Parameters: "launchOnStartup"; Description: "
 Type: filesandordirs; Name: "{app}"
 
 [code]
-function InitializeUninstall(): Boolean;
+function KillApplicationIfRunning(): Boolean;
 var
   ErrorCode: Integer;
 begin
@@ -87,9 +87,20 @@ begin
      (MsgBox('Application is running, do you want to close it?',
              mbConfirmation, MB_OKCANCEL) = IDOK) then
   begin
-    Exec('taskkill.exe', '/f /im GrammarChecker.exe', '', SW_HIDE, 
+    Exec('taskkill.exe', '/f /im GrammarChecker.exe', '', SW_HIDE,
          ewWaitUntilTerminated, ErrorCode);
   end;
 
   Result := True;
 end;
+
+function InitializeSetup(): Boolean;
+begin
+  Result := KillApplicationIfRunning();
+end;
+
+function InitializeUninstall(): Boolean;
+begin
+  Result := KillApplicationIfRunning();
+end;
+
