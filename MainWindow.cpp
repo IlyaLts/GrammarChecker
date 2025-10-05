@@ -475,7 +475,9 @@ void MainWindow::readSettings()
     providers.insert("Google", { "https://generativelanguage.googleapis.com/v1beta", "", { "gemini-2.5-flash",
 																						   "gemini-2.5-pro",
                                                                                            "gemini-2.0-flash",
-                                                                                           "gemini-2.5-flash-lite" } });
+                                                                                           "gemini-2.5-flash-lite",
+                                                                                           "gemini-flash-latest",
+                                                                                           "gemini-flash-lite-latest" } });
 
     providers.insert("DeepSeek", { "https://api.deepseek.com", "", { "deepseek-chat" } });
     providers.insert("xAI", { "https://api.x.ai/v1", "", { "grok-3-mini", "grok-3", "grok-4-0709" } });
