@@ -73,10 +73,10 @@ Profile::Profile(QWidget* parent) : QWidget(parent)
 
     setLayout(tabLayout);
 
-    connect(enableCheckBox, QCheckBox::checkStateChanged, this, &Profile::enableStateChanged);
-    connect(shortcutEdit, QKeySequenceEdit::keySequenceChanged, this, &Profile::keySequenceChanged);
-    connect(keyLineEdit, QLineEdit::textChanged, this, &Profile::keyChanged);
-    connect(modelComboBox, QComboBox::activated, this, &Profile::modelChanged);
+    connect(enableCheckBox, &QCheckBox::checkStateChanged, this, &Profile::enableStateChanged);
+    connect(shortcutEdit, &QKeySequenceEdit::keySequenceChanged, this, &Profile::keySequenceChanged);
+    connect(keyLineEdit, &QLineEdit::textChanged, this, &Profile::keyChanged);
+    connect(modelComboBox, &QComboBox::activated, this, &Profile::modelChanged);
 }
 
 /*

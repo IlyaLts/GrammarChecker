@@ -4,11 +4,19 @@ INCLUDEPATH += liboai-main/liboai/include/ \
                curl-8.11.1_3-win64-mingw/include \
                json/include
 
-LIBS += -lUser32 \
-        -L"$$PWD/liboai-main/liboai" -lliboai \
-        -L"$$PWD/curl-8.11.1_3-win64-mingw/lib" -llibcurl -llibcurl.dll
+win32 {
+    LIBS += -L"$$PWD/liboai-main/liboai" -lliboai \
+            -lUser32 \
+            -L"$$PWD/curl-8.11.1_3-win64-mingw/lib" -llibcurl -llibcurl.dll
+}
 
-CONFIG += c++20 lrelease embed_translations
+unix {
+    LIBS += -L"$$PWD/liboai-main/liboai" -loai \
+            -lcurl
+}
+
+CONFIG += c++20 lrelease embed_translations pkgconfig
+PKGCONFIG += libcurl
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

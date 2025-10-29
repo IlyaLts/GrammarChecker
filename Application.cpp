@@ -24,6 +24,8 @@
 #include <QSettings>
 #include <QClipboard>
 #include <QTime>
+#include <QDir>
+#include <QFileInfo>
 
 Language defaultLanguage = { QLocale::English, QLocale::UnitedStates, ":/i18n/en_US.qm", "&English" };
 
@@ -58,7 +60,7 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
     QLocale::Language systemLanguage = QLocale::system().language();
 
     setTranslator(static_cast<QLocale::Language>(settings.value("Language", systemLanguage).toInt()));    
-    connect(QApplication::clipboard(), QClipboard::dataChanged, this, &Application::clipboardChanged);
+    connect(QApplication::clipboard(), &QClipboard::dataChanged, this, &Application::clipboardChanged);
 }
 
 /*

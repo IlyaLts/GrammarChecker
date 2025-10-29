@@ -168,9 +168,9 @@ toNativeModifier
 */
 unsigned int toNativeModifier(Qt::KeyboardModifiers modifiers)
 {
+#ifdef Q_OS_WIN
     UINT nativeModifiers = 0;
 
-#ifdef Q_OS_WIN
     if (modifiers & Qt::AltModifier)
         nativeModifiers |= MOD_ALT;
     if (modifiers & Qt::ControlModifier)
@@ -179,9 +179,11 @@ unsigned int toNativeModifier(Qt::KeyboardModifiers modifiers)
         nativeModifiers |= MOD_SHIFT;
     if (modifiers & Qt::MetaModifier)
         nativeModifiers |= MOD_WIN;
-#endif
 
     return nativeModifiers;
+#else
+    return 0;
+#endif
 }
 
 /*
