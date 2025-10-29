@@ -70,6 +70,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setWindowTitle("Grammar Checker");
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
 
+#ifndef Q_OS_WIN
+    QString styleSheet;
+
+    // Fixes the issue of overly small menu buttons in the menu bar
+    styleSheet.append("QMenuBar { padding: 5px 0px 5px 0px; } QMenuBar::item { padding: 5px 10px 5px 10px; border: none; }");
+
+    // Fixes a disappearing icon when you click on its menu on Linux while using the Fusion style
+    styleSheet.append("QMenuBar::item:selected { background: #e3e3e3; } QMenuBar::item:pressed { background: #e3e3e3; }");
+
+    this->menuBar()->setStyleSheet(styleSheet);
+#endif
+
     notification.setSource(QUrl::fromLocalFile("sounds/notification.wav"));
 
     for (int i = 0; i < NUMBER_OF_TABS; i++)
