@@ -18,7 +18,7 @@
 */
 
 #include "../Application.h"
-#include "Common.h"
+#include "../Common.h"
 #include <QClipboard>
 #include <QTime>
 #include <QKeyCombination>

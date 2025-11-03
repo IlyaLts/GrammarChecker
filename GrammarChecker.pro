@@ -25,34 +25,34 @@ PKGCONFIG += libcurl
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Application.cpp \
-    Main.cpp \
-    MainWindow.cpp \
-    Profile.cpp \
-    UnhidableMenu.cpp
+    Source/Application.cpp \
+    Source/Main.cpp \
+    Source/MainWindow.cpp \
+    Source/Profile.cpp \
+    Source/UnhidableMenu.cpp
 
 win32 {
 SOURCES += \
-    Win/Common.cpp \
-    Win/NativeEventFilter.cpp \
+    Source/Win/Common.cpp \
+    Source/Win/NativeEventFilter.cpp \
 }
 
 unix {
 SOURCES += \
-    X11/Common.cpp \
-    X11/NativeEventFilter.cpp
+    Source/X11/Common.cpp \
+    Source/X11/NativeEventFilter.cpp
 }
 
 HEADERS += \
-    Application.h \
-    Common.h \
-    MainWindow.h \
-    NativeEventFilter.h \
-    Profile.h \
-    UnhidableMenu.h
+    Source/Application.h \
+    Source/Common.h \
+    Source/MainWindow.h \
+    Source/NativeEventFilter.h \
+    Source/Profile.h \
+    Source/UnhidableMenu.h
 
 FORMS += \
-    MainWindow.ui
+    Source/MainWindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -60,15 +60,15 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    Icon.ico \
-    Resources.rc \
+    Source/Icon.ico \
+    Source/Resources.rc \
     LICENSE.txt \
     README.md
 
 RESOURCES += \
     GrammarChecker.qrc
 
-RC_FILE = Resources.rc
+RC_FILE = Source/Resources.rc
 
 # qml_debug flag for debug and profile build configurations
 CONFIG(qml_debug): DEFINES += DEBUG

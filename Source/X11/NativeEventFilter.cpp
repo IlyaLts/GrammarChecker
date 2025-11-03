@@ -17,9 +17,9 @@
 ===============================================================================
 */
 
-#include "NativeEventFilter.h"
-#include "MainWindow.h"
-#include "Common.h"
+#include "../NativeEventFilter.h"
+#include "../MainWindow.h"
+#include "../Common.h"
 #include <QMutex>
 
 #include <X11/X.h>
