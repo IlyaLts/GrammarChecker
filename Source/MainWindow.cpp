@@ -377,7 +377,7 @@ MainWindow::setupMenus
 */
 void MainWindow::setupMenus()
 {
-    iconMain.addFile(":/Icon.ico");
+    iconMain.addFile(":/Source/Icon.ico");
     iconSettings.addFile(":/Images/IconSettings.png");
 
     notificationSoundAction = new QAction("&" + tr("Notification Sound"), this);
