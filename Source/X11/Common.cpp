@@ -17,7 +17,6 @@
 ===============================================================================
 */
 
-#include "../Application.h"
 #include "../Common.h"
 #include <QClipboard>
 #include <QTime>
@@ -72,6 +71,8 @@ pasteFromClipboard
 */
 void pasteFromClipboard(bool smoothTyping, int smoothTypingDelay)
 {
+    Q_UNUSED(smoothTypingDelay);
+
     QString clipboard = QApplication::clipboard()->text();
 
     Display *display = XOpenDisplay(NULL);
