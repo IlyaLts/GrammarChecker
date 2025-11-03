@@ -12,7 +12,9 @@ win32 {
 
 unix {
     LIBS += -L"$$PWD/liboai-main/liboai" -loai \
-            -lcurl
+            -lcurl \
+            -lX11 \
+            -lXtst
 }
 
 CONFIG += c++20 lrelease embed_translations pkgconfig
@@ -24,12 +26,22 @@ PKGCONFIG += libcurl
 
 SOURCES += \
     Application.cpp \
-    Common.cpp \
     Main.cpp \
     MainWindow.cpp \
-    NativeEventFilter.cpp \
     Profile.cpp \
     UnhidableMenu.cpp
+
+win32 {
+SOURCES += \
+    Win/Common.cpp \
+    Win/NativeEventFilter.cpp \
+}
+
+unix {
+SOURCES += \
+    X11/Common.cpp \
+    X11/NativeEventFilter.cpp
+}
 
 HEADERS += \
     Application.h \

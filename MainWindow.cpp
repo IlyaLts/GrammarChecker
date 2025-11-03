@@ -214,7 +214,6 @@ void MainWindow::checkGrammar(int id)
 
     if (notificationSoundAction->isChecked())
         notification.play();
-    qDebug("true");
 }
 
 /*
@@ -397,13 +396,14 @@ void MainWindow::setupMenus()
     version->setDisabled(true);
 
     notificationSoundAction->setCheckable(true);
-    smoothTypingAction->setCheckable(true);
     launchOnStartupAction->setCheckable(true);
     showInTrayAction->setCheckable(true);
 
 #ifdef Q_OS_WIN
+    smoothTypingAction->setCheckable(true);
     launchOnStartupAction->setChecked(QFile::exists(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation) + "/Startup/GrammarChecker.lnk"));
 #else
+    smoothTypingAction->setCheckable(false);
     launchOnStartupAction->setChecked(QFile::exists(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/autostart/GrammarChecker.desktop"));
 #endif
 
@@ -419,7 +419,11 @@ void MainWindow::setupMenus()
     settingsMenu->setIcon(iconSettings);
     settingsMenu->addMenu(languageMenu);
     settingsMenu->addAction(notificationSoundAction);
+
+#ifdef Q_OS_WIN
     settingsMenu->addAction(smoothTypingAction);
+#endif
+
     settingsMenu->addAction(launchOnStartupAction);
     settingsMenu->addAction(showInTrayAction);
     settingsMenu->addSeparator();
@@ -475,12 +479,17 @@ void MainWindow::readSettings()
 
     notificationSoundAction->setChecked(settings.value("NotificationSound", true).toBool());
     notification.setVolume(settings.value("NotificationSoundVolume", 1.0f).toFloat());
-    smoothTypingAction->setChecked(settings.value("SmoothTyping", true).toBool());
     bool showInTray = settings.value("ShowInTray", QSystemTrayIcon::isSystemTrayAvailable()).toBool();
     showInTrayAction->setChecked(showInTray);
     language = static_cast<QLocale::Language>(settings.value("Language", QLocale::system().language()).toInt());
     smoothTypingDelay = settings.value("SmoothTypingDynamicDelay", SMOOTH_TYPING_DELAY).toInt();
     maxTimeout = settings.value("MaxTimeout", MAX_TIMEOUT).toInt();
+
+#ifdef Q_OS_WIN
+    smoothTypingAction->setChecked(settings.value("SmoothTyping", true).toBool());
+#else
+    smoothTypingAction->setChecked(false);
+#endif
 
     providers.insert("OpenAI", { "https://api.openai.com/v1", "", {"gpt-4o-mini", "gpt-5-mini", "gpt-5"} });
 

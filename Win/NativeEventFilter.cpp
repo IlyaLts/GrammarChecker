@@ -22,9 +22,7 @@
 #include "Common.h"
 #include <QMutex>
 
-#ifdef Q_OS_WIN
 #include <Windows.h>
-#endif
 
 /*
 ===================
@@ -33,7 +31,9 @@ NativeEventFilter::nativeEventFilter
 */
 bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
 {
-#ifdef Q_OS_WIN
+    if (!window)
+        return false;
+
     MSG *msg = static_cast<MSG *>(message);
 
     Q_UNUSED(eventType);
@@ -41,31 +41,27 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
 
     if (msg->message == WM_HOTKEY)
     {
-        if (window)
+        static QMutex mutex;
+
+        for (int i = 0; i < NUMBER_OF_TABS; i++)
         {
-            static QMutex mutex;
-
-            for (int i = 0; i < NUMBER_OF_TABS; i++)
+            for (int j = 0; j < window->keySequence(i).count(); j++)
             {
-                for (int j = 0; j < window->keySequence(i).count(); j++)
+                UINT modifier = toNativeModifier(window->keySequence(i)[j].keyboardModifiers());
+                UINT virtualKey = toNativeKey(window->keySequence(i)[j].key());
+
+                if (modifier == LOWORD(msg->lParam) && virtualKey == HIWORD(msg->lParam))
                 {
-                    UINT modifier = toNativeModifier(window->keySequence(i)[j].keyboardModifiers());
-                    UINT virtualKey = toNativeKey(window->keySequence(i)[j].key());
-
-                    if (modifier == LOWORD(msg->lParam) && virtualKey == HIWORD(msg->lParam))
-                    {
-                        if (!mutex.tryLock())
-                            return true;
-
-                        window->checkGrammar(i);
-                        mutex.unlock();
+                    if (!mutex.tryLock())
                         return true;
-                    }
+
+                    window->checkGrammar(i);
+                    mutex.unlock();
+                    return true;
                 }
             }
         }
     }
-#endif
 
     return false;
 }

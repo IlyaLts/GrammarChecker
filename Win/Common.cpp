@@ -17,23 +17,21 @@
 ===============================================================================
 */
 
-#include "Application.h"
+#include "../Application.h"
 #include "Common.h"
 #include <QClipboard>
 #include <QTime>
+#include <QKeyCombination>
 
-#ifdef Q_OS_WIN
 #include <windows.h>
-#endif
 
 /*
 ===================
-cutToClipboard
+registerShortcut
 ===================
 */
 bool cutToClipboard()
 {
-#ifdef Q_OS_WIN
     INPUT inputs[4];
     memset(inputs, 0, sizeof(inputs));
 
@@ -63,7 +61,6 @@ bool cutToClipboard()
         return false;
 
     return true;
-#endif
 }
 
 /*
@@ -71,12 +68,11 @@ bool cutToClipboard()
 pasteFromClipboard
 ===================
 */
-void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay)
+void pasteFromClipboard(bool smoothTyping, int smoothTypingDelay)
 {
-#ifdef Q_OS_WIN
     QString clipboard = QApplication::clipboard()->text();
 
-    if (smoothPasting)
+    if (smoothTyping)
     {
         INPUT input[2];
         memset(&input, 0, sizeof(input));
@@ -96,7 +92,7 @@ void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay)
                 return;
             }
 
-            Sleep(smoothPastingDelay / clipboard.length());
+            Sleep(smoothTypingDelay / clipboard.length());
         }
     }
     else
@@ -131,7 +127,6 @@ void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay)
         while (QTime::currentTime() < dieTime)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
-#endif
 }
 
 /*
@@ -141,12 +136,10 @@ registerShortcut
 */
 void registerShortcut(int id, const QKeyCombination &keyCombination)
 {
-#ifdef Q_OS_WIN
     UINT modifier = toNativeModifier(keyCombination.keyboardModifiers());
     UINT virtualKey = toNativeKey(keyCombination.key());
 
     RegisterHotKey(NULL, id, modifier, virtualKey);
-#endif
 }
 
 /*
@@ -156,9 +149,7 @@ unregisterShortcut
 */
 void unregisterShortcut(int id)
 {
-#ifdef Q_OS_WIN
     UnregisterHotKey(NULL, id);
-#endif
 }
 
 /*
@@ -168,22 +159,21 @@ toNativeModifier
 */
 unsigned int toNativeModifier(Qt::KeyboardModifiers modifiers)
 {
-#ifdef Q_OS_WIN
     UINT nativeModifiers = 0;
 
     if (modifiers & Qt::AltModifier)
         nativeModifiers |= MOD_ALT;
+
     if (modifiers & Qt::ControlModifier)
         nativeModifiers |= MOD_CONTROL;
+
     if (modifiers & Qt::ShiftModifier)
         nativeModifiers |= MOD_SHIFT;
+
     if (modifiers & Qt::MetaModifier)
         nativeModifiers |= MOD_WIN;
 
     return nativeModifiers;
-#else
-    return 0;
-#endif
 }
 
 /*
@@ -193,7 +183,6 @@ toNativeKey
 */
 unsigned int toNativeKey(Qt::Key key)
 {
-#ifdef Q_OS_WIN
     // 0 - 9
     if (key >= Qt::Key_0 && key <= Qt::Key_9)
         return key;
@@ -259,5 +248,4 @@ unsigned int toNativeKey(Qt::Key key)
     default:
         return 0;
     }
-#endif
 }

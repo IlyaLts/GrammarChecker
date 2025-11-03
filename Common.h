@@ -23,7 +23,7 @@
 #include <QKeySequence>
 
 bool cutToClipboard();
-void pasteFromClipboard(bool smoothPasting, int smoothPastingDelay);
+void pasteFromClipboard(bool smoothTyping, int smoothTypingDelay);
 void registerShortcut(int id, const QKeyCombination &keyCombination);
 void unregisterShortcut(int id);
 unsigned int toNativeModifier(Qt::KeyboardModifiers modifiers);
