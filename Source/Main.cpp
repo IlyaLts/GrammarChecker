@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     {
         QString title = app.translate("MainWindow", "Couldn't launch!");
         QString text = app.translate("MainWindow", "The app is already launched and cannot be launched as a second instance.");
-        QMessageBox::warning(NULL, title, text);
+        QMessageBox::warning(nullptr, title, text);
         return -1;
     }
 

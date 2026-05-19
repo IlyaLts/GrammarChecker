@@ -23,7 +23,7 @@
 #include <QFile>
 #include <QSettings>
 #include <QClipboard>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QDir>
 #include <QFileInfo>
 
@@ -70,15 +70,17 @@ Application::waitForClipboardChange
 */
 bool Application::waitForClipboardChange()
 {
-    QTime dieTime = QTime::currentTime().addSecs(1);
+    QElapsedTimer timer;
+    timer.start();
+
     m_clipboardChanged = false;
 
     while (!m_clipboardChanged)
     {
-        if (QTime::currentTime() >= dieTime)
+        if (timer.hasExpired(1000))
             return false;
 
-        QApplication::processEvents();
+        QApplication::processEvents(QEventLoop::AllEvents, 50);
     }
 
     if (QApplication::clipboard()->text().isEmpty())

@@ -25,7 +25,6 @@
 #include "Profile.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
-#include <QTimer>
 #include <QSoundEffect>
 
 #define SMOOTH_TYPING_DELAY     250
@@ -94,6 +93,7 @@ private:
     void readSettings();
     void writeSettings() const;
     void retranslate();
+    void restoreSelectionAndClipboard(const QString &selection, const QString &savedClipboard);
 
     NativeEventFilter filter;
 

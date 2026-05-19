@@ -20,8 +20,9 @@
 #include "../Application.h"
 #include "../Common.h"
 #include <QClipboard>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QKeyCombination>
+#include <QtGlobal>
 
 #include <windows.h>
 
@@ -92,7 +93,7 @@ void pasteFromClipboard(bool smoothTyping, int smoothTypingDelay)
                 return;
             }
 
-            Sleep(smoothTypingDelay / clipboard.length());
+            Sleep(qMax(1, smoothTypingDelay / clipboard.length()));
         }
     }
     else
@@ -122,9 +123,11 @@ void pasteFromClipboard(bool smoothTyping, int smoothTypingDelay)
             return;
         }
 
+        QElapsedTimer timer;
+        timer.start();
+
         // Waits for clipboard content to be pasted
-        QTime dieTime = QTime::currentTime().addSecs(1);
-        while (QTime::currentTime() < dieTime)
+        while (!timer.hasExpired(1000))
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
 }
@@ -138,6 +141,9 @@ void registerShortcut(int id, const QKeyCombination &keyCombination)
 {
     UINT modifier = toNativeModifier(keyCombination.keyboardModifiers());
     UINT virtualKey = toNativeKey(keyCombination.key());
+
+    if (virtualKey == 0)
+        return;
 
     RegisterHotKey(NULL, id, modifier, virtualKey);
 }

@@ -30,7 +30,6 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QMenuBar>
-#include <QTimer>
 #include <QClipboard>
 #include <QDesktopServices>
 #include <QMessageBox>
@@ -107,6 +106,8 @@ MainWindow::~MainWindow
 MainWindow::~MainWindow()
 {
     writeSettings();
+    qApp->removeNativeEventFilter(&filter);
+    filter.window = nullptr;
     delete ui;
 }
 
@@ -137,27 +138,40 @@ MainWindow::checkGrammar
 */
 void MainWindow::checkGrammar(int id)
 {
+    if (id < 0 || id >= NUMBER_OF_TABS)
+        return;
+
     QClipboard *clipboard = QApplication::clipboard();
     QString savedClipboard = clipboard->text();
 
     if (!cutToClipboard())
         return;
 
+    QString input = clipboard->text();
+
     auto modelData = profiles[id]->currentModel();
 
     QString modelName = modelData.first;
     ModelProvider *model = modelData.second;
+
+    if (!model || modelName.isEmpty() || input.isEmpty())
+    {
+        restoreSelectionAndClipboard(input, savedClipboard);
+        return;
+    }
+
     OpenAI oai(model->url.toUtf8().data());
     Conversation convo;
     QString output;
     QString prompt = profiles[id]->prompt();
 
     prompt.append(profiles[id]->hiddenPrompt());
-    prompt.append(clipboard->text());
+    prompt.append(input);
 
     if (!convo.AddUserData(prompt.toUtf8().data()))
     {
         qDebug() << "Couldn't add user input to the conversation";
+        restoreSelectionAndClipboard(input, savedClipboard);
         return;
     }
 
@@ -180,6 +194,7 @@ void MainWindow::checkGrammar(int id)
             if (!convo.Update(response))
             {
                 qDebug() << "Couldn't update the conversation given a response object";
+                restoreSelectionAndClipboard(input, savedClipboard);
                 return;
             }
 
@@ -192,16 +207,24 @@ void MainWindow::checkGrammar(int id)
 #else
             QMessageBox::critical(nullptr, "Grammar Checker", e.what());
 #endif
+            restoreSelectionAndClipboard(input, savedClipboard);
             return;
         }
     }
     else
     {
 #ifdef QT_DEBUG
-        qDebug() << "Coundn't set the authorization key for the OpenAI API";
+        qDebug() << "Couldn't set the authorization key for the OpenAI API";
 #else
-        QMessageBox::critical(nullptr, "Grammar Checker", "Coundn't set the authorization key for the OpenAI API");
+        QMessageBox::critical(nullptr, "Grammar Checker", "Couldn't set the authorization key for the OpenAI API");
 #endif
+        restoreSelectionAndClipboard(input, savedClipboard);
+        return;
+    }
+
+    if (output.isEmpty())
+    {
+        restoreSelectionAndClipboard(input, savedClipboard);
         return;
     }
 
@@ -214,6 +237,22 @@ void MainWindow::checkGrammar(int id)
 
     if (notificationSoundAction->isChecked())
         notification.play();
+}
+
+/*
+===================
+MainWindow::restoreSelectionAndClipboard
+===================
+*/
+void MainWindow::restoreSelectionAndClipboard(const QString &selection, const QString &savedClipboard)
+{
+    QClipboard *clipboard = QApplication::clipboard();
+
+    clipboard->setText(selection);
+    gcApp->waitForClipboardChange();
+    pasteFromClipboard(false, smoothTypingDelay);
+    clipboard->setText(savedClipboard);
+    gcApp->waitForClipboardChange();
 }
 
 /*
@@ -367,7 +406,7 @@ MainWindow::openConfig
 void MainWindow::openConfig()
 {
     QString path(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/" + SETTINGS_FILENAME);
-    QDesktopServices::openUrl(path);
+    QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
 
 /*
@@ -383,8 +422,8 @@ void MainWindow::setupMenus()
     notificationSoundAction = new QAction("&" + tr("Notification Sound"), this);
     smoothTypingAction = new QAction("&" + tr("Smooth Typing"), this);
     launchOnStartupAction = new QAction("&" + tr("Launch on Startup"), this);
-    showInTrayAction = new QAction("&" + tr("Show in System Tray"));
-    openConfigAction = new QAction("&" + tr("Open Config"));
+    showInTrayAction = new QAction("&" + tr("Show in System Tray"), this);
+    openConfigAction = new QAction("&" + tr("Open Config"), this);
     showAction = new QAction("&" + tr("Show"), this);
     quitAction = new QAction("&" + tr("Quit"), this);
     reportBugAction = new QAction("&" + tr("Report a Bug"), this);

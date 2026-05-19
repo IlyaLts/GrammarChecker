@@ -19,7 +19,7 @@
 
 #include "../Common.h"
 #include <QClipboard>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QKeyCombination>
 #include <QDebug>
 #include <QApplication>
@@ -48,18 +48,27 @@ bool cutToClipboard()
     KeyCode kc_ctrl = XKeysymToKeycode(display, XK_Control_L);
     KeyCode kc_x = XKeysymToKeycode(display, XK_x);
 
+    if (kc_ctrl == 0 || kc_x == 0)
+    {
+        XCloseDisplay(display);
+        return false;
+    }
+
     XTestFakeKeyEvent(display, kc_ctrl, True, CurrentTime);
     XTestFakeKeyEvent(display, kc_x, True, CurrentTime);
     XSync(display, false);
 
+    QElapsedTimer timer;
+    timer.start();
+
     // Waits for content to be cut
-    QTime dieTime = QTime::currentTime().addSecs(1);
-    while (QTime::currentTime() < dieTime)
+    while (!timer.hasExpired(1000))
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     XTestFakeKeyEvent(display, kc_x, False, CurrentTime);
     XTestFakeKeyEvent(display, kc_ctrl, False, CurrentTime);
     XSync(display, false);
+    XCloseDisplay(display);
 
     return true;
 }
@@ -71,30 +80,37 @@ pasteFromClipboard
 */
 void pasteFromClipboard(bool smoothTyping, int smoothTypingDelay)
 {
+    Q_UNUSED(smoothTyping);
     Q_UNUSED(smoothTypingDelay);
-
-    QString clipboard = QApplication::clipboard()->text();
 
     Display *display = XOpenDisplay(NULL);
     if (!display)
         return;
 
-    if (!smoothTyping)
+    KeyCode kc_ctrl = XKeysymToKeycode(display, XK_Control_L);
+    KeyCode kc_v = XKeysymToKeycode(display, XK_v);
+
+    if (kc_ctrl == 0 || kc_v == 0)
     {
-        KeyCode kc_ctrl = XKeysymToKeycode(display, XK_Control_L);
-        KeyCode kc_v = XKeysymToKeycode(display, XK_v);
-
-        XTestFakeKeyEvent(display, kc_ctrl, True, CurrentTime);
-        XTestFakeKeyEvent(display, kc_v, True, CurrentTime);
-        XSync(display, false);
-        XTestFakeKeyEvent(display, kc_v, False, CurrentTime);
-        XTestFakeKeyEvent(display, kc_ctrl, False, CurrentTime);
-        XSync(display, false);
-
-        QTime dieTime = QTime::currentTime().addSecs(1);
-        while (QTime::currentTime() < dieTime)
-            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+        XCloseDisplay(display);
+        return;
     }
+
+    XTestFakeKeyEvent(display, kc_ctrl, True, CurrentTime);
+    XTestFakeKeyEvent(display, kc_v, True, CurrentTime);
+    XSync(display, false);
+    XTestFakeKeyEvent(display, kc_v, False, CurrentTime);
+    XTestFakeKeyEvent(display, kc_ctrl, False, CurrentTime);
+    XSync(display, false);
+
+    QElapsedTimer timer;
+    timer.start();
+
+    // Waits for clipboard content to be pasted
+    while (!timer.hasExpired(1000))
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
+    XCloseDisplay(display);
 }
 
 /*
@@ -122,6 +138,9 @@ void registerShortcut(int id, const QKeyCombination &keyCombination)
     Display *display = x11App->display();
     Window root = DefaultRootWindow(display);
     int keycode = toNativeKey(keyCombination.key());
+
+    if (keycode == 0)
+        return;
 
     // For some reason, it works only with AnyModifier. So, we should check the modifier manually
     XGrabKey(display, keycode, AnyModifier, root, true, GrabModeAsync, GrabModeAsync);
