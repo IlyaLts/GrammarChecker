@@ -541,6 +541,8 @@ void MainWindow::readSettings()
 
     providers.insert("DeepSeek", { "https://api.deepseek.com", "", { "deepseek-chat" } });
     providers.insert("xAI", { "https://api.x.ai/v1", "", { "grok-3-mini", "grok-3", "grok-4-0709" } });
+	
+    providers.insert("OpenRouter", { "https://openrouter.ai/api/v1", "", { "openrouter\free" } });
 
     // Loads models
     for (auto &provider : settings.childGroups())
