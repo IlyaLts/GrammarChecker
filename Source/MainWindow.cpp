@@ -509,7 +509,8 @@ MainWindow::readSettings
 */
 void MainWindow::readSettings()
 {
-    QSettings settings(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/" + SETTINGS_FILENAME, QSettings::IniFormat);
+    QString configPath(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/" + SETTINGS_FILENAME);
+    QSettings settings(configPath, QSettings::IniFormat);
 
     providers.clear();
 
@@ -529,23 +530,6 @@ void MainWindow::readSettings()
 #else
     smoothTypingAction->setChecked(false);
 #endif
-
-    providers.insert("OpenAI", { "https://api.openai.com/v1", "", { "gpt-5.5", "gpt-5.4", "gpt-5", "gpt-5.4-mini", "gpt-5-mini", "gpt-4o-mini" } });
-
-    providers.insert("Google", { "https://generativelanguage.googleapis.com/v1beta", "", { "gemini-3.5-flash",
-                                                                                           "gemini-3.1-flash-lite",
-                                                                                           "gemini-3.1-flash-live-preview",
-                                                                                           "gemini-3.1-pro-preview",
-                                                                                           "gemini-3-flash-preview",
-                                                                                           "gemini-2.5-flash",
-                                                                                           "gemini-2.5-pro",
-                                                                                           "gemini-2.5-flash-lite",
-                                                                                           "gemini-flash-latest",
-                                                                                           "gemini-flash-lite-latest" } });
-
-    providers.insert("DeepSeek", { "https://api.deepseek.com", "", { "deepseek-v4-pro", "deepseek-v4-flash" } });
-    providers.insert("xAI", { "https://api.x.ai/v1", "", { "grok-4.3" } });
-    providers.insert("OpenRouter", { "https://openrouter.ai/api/v1", "", { "openrouter/free" } });
 
     // Loads models
     for (auto &provider : settings.childGroups())
@@ -567,6 +551,37 @@ void MainWindow::readSettings()
 
         settings.endGroup();
         settings.endGroup();
+    }
+
+    if (providers.empty() && !QFileInfo::exists(configPath))
+    {
+        providers.insert("OpenAI", { "https://api.openai.com/v1", "", { "gpt-6-astra",
+                                                                        "gpt-6.1-sol",
+                                                                        "gpt-6-luna",
+                                                                        "gpt-5.5",
+                                                                        "gpt-5.4"
+                                                                        "gpt-5",
+                                                                        "gpt-5.4-mini",
+                                                                        "gpt-5-mini",
+                                                                        "gpt-4o-mini" } });
+
+        providers.insert("Google", { "https://generativelanguage.googleapis.com/v1beta", "", { "gemini-3.8-flash",
+                                                                                               "gemini-3.7-flash",
+                                                                                               "gemini-3.6-flash",
+                                                                                               "gemini-3.5-flash",
+                                                                                               "gemini-3.5-flash-lite",
+                                                                                               "gemini-3.1-flash-lite",
+                                                                                               "gemini-3.1-pro-preview",
+                                                                                               "gemini-3-flash-preview",
+                                                                                               "gemini-2.5-flash",
+                                                                                               "gemini-2.5-pro",
+                                                                                               "gemini-2.5-flash-lite",
+                                                                                               "gemini-flash-latest",
+                                                                                               "gemini-flash-lite-latest" } });
+
+        providers.insert("DeepSeek", { "https://api.deepseek.com", "", { "deepseek-v4-pro", "deepseek-flash" } });
+        providers.insert("xAI", { "https://api.x.ai/v1", "", { "grok-4.7" } });
+        providers.insert("OpenRouter", { "https://openrouter.ai/api/v1", "", { "openrouter/free" } });
     }
 
     for (int i = 0; i < NUMBER_OF_TABS; i++)
