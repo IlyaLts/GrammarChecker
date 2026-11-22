@@ -133,6 +133,23 @@ void MainWindow::show()
 
 /*
 ===================
+MainWindow::showMessage
+===================
+*/
+void MainWindow::showMessage(const QString &title, const QString &message)
+{
+#ifdef QT_DEBUG
+    qDebug() << message;
+#else
+    if (QSystemTrayIcon::isSystemTrayAvailable())
+        trayIcon->showMessage(title, message, QSystemTrayIcon::Critical, std::numeric_limits<int>::max());
+    else
+        QMessageBox::critical(nullptr, title, message);
+#endif
+}
+
+/*
+===================
 MainWindow::checkGrammar
 ===================
 */
@@ -170,7 +187,7 @@ void MainWindow::checkGrammar(int id)
 
     if (!convo.AddUserData(prompt.toUtf8().data()))
     {
-        qDebug() << "Couldn't add user input to the conversation";
+        showMessage("Grammar Checker", "Couldn't add user input to the conversation");
         restoreSelectionAndClipboard(input, savedClipboard);
         return;
     }
@@ -193,7 +210,7 @@ void MainWindow::checkGrammar(int id)
 
             if (!convo.Update(response))
             {
-                qDebug() << "Couldn't update the conversation given a response object";
+                showMessage("Grammar Checker", "Couldn't update the conversation given a response object");
                 restoreSelectionAndClipboard(input, savedClipboard);
                 return;
             }
@@ -202,22 +219,14 @@ void MainWindow::checkGrammar(int id)
         }
         catch (std::exception& e)
         {
-#ifdef QT_DEBUG
-            qDebug() << e.what();
-#else
-            QMessageBox::critical(nullptr, "Grammar Checker", e.what());
-#endif
+            showMessage("Grammar Checker", e.what());
             restoreSelectionAndClipboard(input, savedClipboard);
             return;
         }
     }
     else
     {
-#ifdef QT_DEBUG
-        qDebug() << "Couldn't set the authorization key for the OpenAI API";
-#else
-        QMessageBox::critical(nullptr, "Grammar Checker", "Couldn't set the authorization key for the OpenAI API");
-#endif
+        showMessage("Grammar Checker", "Couldn't set the authorization key for the OpenAI API");
         restoreSelectionAndClipboard(input, savedClipboard);
         return;
     }

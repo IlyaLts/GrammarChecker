@@ -69,6 +69,7 @@ public:
 public Q_SLOTS:
 
     void show();
+    void showMessage(const QString &title, const QString &message);
 
 protected:
 
