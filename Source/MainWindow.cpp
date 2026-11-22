@@ -136,12 +136,13 @@ void MainWindow::show()
 MainWindow::showMessage
 ===================
 */
-void MainWindow::showMessage(const QString &title, const QString &message)
+void MainWindow::showMessage(const QString &message)
 {
 #ifdef QT_DEBUG
-    Q_UNUSED(title);
     qDebug() << message;
 #else
+    QString title("Grammar Checker");
+
     if (QSystemTrayIcon::isSystemTrayAvailable())
         trayIcon->showMessage(title, message, QSystemTrayIcon::Critical, std::numeric_limits<int>::max());
     else
@@ -163,7 +164,10 @@ void MainWindow::checkGrammar(int id)
     QString savedClipboard = clipboard->text();
 
     if (!cutToClipboard())
+    {
+        showMessage("Couldn't cut the text to the clipboard!");
         return;
+    }
 
     QString input = clipboard->text();
 
@@ -172,8 +176,16 @@ void MainWindow::checkGrammar(int id)
     QString modelName = modelData.first;
     ModelProvider *model = modelData.second;
 
-    if (!model || modelName.isEmpty() || input.isEmpty())
+    if (!model || modelName.isEmpty())
     {
+        showMessage("Unspecified model name!");
+        restoreSelectionAndClipboard(input, savedClipboard);
+        return;
+    }
+
+    if (input.isEmpty())
+    {
+        showMessage("Selected input is empty!");
         restoreSelectionAndClipboard(input, savedClipboard);
         return;
     }
@@ -188,7 +200,7 @@ void MainWindow::checkGrammar(int id)
 
     if (!convo.AddUserData(prompt.toUtf8().data()))
     {
-        showMessage("Grammar Checker", "Couldn't add user input to the conversation");
+        showMessage("Couldn't add user input to the conversation!");
         restoreSelectionAndClipboard(input, savedClipboard);
         return;
     }
@@ -211,7 +223,7 @@ void MainWindow::checkGrammar(int id)
 
             if (!convo.Update(response))
             {
-                showMessage("Grammar Checker", "Couldn't update the conversation given a response object");
+                showMessage("Couldn't update the conversation with the provided response object!");
                 restoreSelectionAndClipboard(input, savedClipboard);
                 return;
             }
@@ -220,20 +232,21 @@ void MainWindow::checkGrammar(int id)
         }
         catch (std::exception& e)
         {
-            showMessage("Grammar Checker", e.what());
+            showMessage(e.what());
             restoreSelectionAndClipboard(input, savedClipboard);
             return;
         }
     }
     else
     {
-        showMessage("Grammar Checker", "Couldn't set the authorization key for the OpenAI API");
+        showMessage("Couldn't set the authorization key for the OpenAI API!");
         restoreSelectionAndClipboard(input, savedClipboard);
         return;
     }
 
     if (output.isEmpty())
     {
+        showMessage("Output is empty!");
         restoreSelectionAndClipboard(input, savedClipboard);
         return;
     }
