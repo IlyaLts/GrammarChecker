@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "GrammarChecker"
-#define MyAppVersion "1.2.3"
+#define MyAppVersion "1.3"
 #define MyAppURL "https://github.com/IlyaLts/GrammarChecker"
 #define MyAppExeName "GrammarChecker.exe"
 
@@ -16,6 +16,7 @@ AppVersion={#MyAppVersion}
 AppMutex=GrammarCheckerMutex
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisherURL={#MyAppURL}
+AppPublisher="Ilya Lyakhovets"
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}

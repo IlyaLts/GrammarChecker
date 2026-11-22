@@ -1,4 +1,11 @@
 ==========================
+1.3 - Oct 21, 2026
+==========================
+- Added max timeout input field for waiting for the response in milliseconds.
+- Changed error messages to be displayed as a tray message instead of showing dialog boxes.
+- Fixed an issue where default models continued to be added even when not specified in the config.
+
+==========================
 1.2.3 - Sep 4, 2025
 ==========================
 - Added a hidden prompt setting in the config for fine-tuning the desired output.
