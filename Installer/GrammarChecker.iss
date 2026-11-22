@@ -40,7 +40,7 @@ LicenseFile=packages\GrammarChecker\meta\LICENSE.txt
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=build
 OutputBaseFilename=GrammarCheckerInstaller
-SetupIconFile=..\Icon.ico
+SetupIconFile=..\Source\Icon.ico
 SolidCompression=yes
 WizardStyle=modern
 
