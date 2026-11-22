@@ -6,7 +6,8 @@
 # How It Works
 It utilizes the OpenAI API, supporting both OpenAI and Google Gemini models (It is possible to add other custom models via config), and requires an API key to function. Simply select the text you want to check and trigger the assigned shortcut. Grammar Checker can be automatically launched on startup and run in the system tray. The main window provides a user-friendly interface where you can assign any specific keyboard shortcut for triggering grammar checks or adjust the prompt requirements to align with your specific writing needs, such as translating text into different language or something else.
 
-![GrammarChecker](https://github.com/user-attachments/assets/cb08df9a-a81d-45ff-b47e-c33f4fb62eec)
+<img width="502" height="405" alt="GrammarChecker" src="https://github.com/user-attachments/assets/4478f64b-0c94-4c7b-af46-3c317c7e3fe2" />
+
 # Dependencies
 - [liboai](https://github.com/D7EAD/liboai)
 - [nlohmann-json](https://github.com/nlohmann/json)
