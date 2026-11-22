@@ -43,7 +43,7 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
     {
         static QMutex mutex;
 
-        for (int i = 0; i < NUMBER_OF_TABS; i++)
+        for (int i = 0; i < numberOfProfiles; i++)
         {
             for (int j = 0; j < window->keySequence(i).count(); j++)
             {

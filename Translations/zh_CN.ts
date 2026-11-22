@@ -95,5 +95,9 @@
             <source>Report a Bug</source>
             <translation>报告错误</translation>
         </message>
+        <message>
+            <source>Max Timeout:</source>
+            <translation>最大超时时间：</translation>
+        </message>
     </context>
 </TS>

@@ -95,5 +95,9 @@
             <source>Report a Bug</source>
             <translation>Hata Bildir</translation>
         </message>
+        <message>
+            <source>Max Timeout:</source>
+            <translation>Maksimum Zaman Aşımı:</translation>
+        </message>
     </context>
 </TS>

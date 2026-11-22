@@ -95,5 +95,9 @@
             <source>Report a Bug</source>
             <translation>Сообщить об ошибке</translation>
         </message>
+        <message>
+            <source>Max Timeout:</source>
+            <translation>Максимальное время ожидания:</translation>
+        </message>
     </context>
 </TS>

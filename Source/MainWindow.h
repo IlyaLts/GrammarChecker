@@ -27,9 +27,9 @@
 #include <QSystemTrayIcon>
 #include <QSoundEffect>
 
-#define SMOOTH_TYPING_DELAY     250
-#define MAX_TIMEOUT             30000
-#define NUMBER_OF_TABS          4
+constexpr int smoothTypingDelay = 250;
+constexpr int defaultMaxTimeout = 30000;
+constexpr int numberOfProfiles = 4;
 
 extern const char *defaultPrompt;
 extern const char *hiddenPrompt;
@@ -103,7 +103,7 @@ private:
     QIcon iconMain;
     QIcon iconSettings;
 
-    Profile *profiles[NUMBER_OF_TABS];
+    Profile *profiles[numberOfProfiles];
     QMap<QString, ModelProvider> providers;
     QList<QAction *> languageActions;
     QAction *notificationSoundAction;
@@ -124,8 +124,7 @@ private:
     QSoundEffect notification;
     QLocale::Language language;
     bool appInitiated = false;
-    int smoothTypingDelay = SMOOTH_TYPING_DELAY;
-    int32_t maxTimeout = 30000;
+    int smoothTypingDelay = smoothTypingDelay;
 };
 
 #endif // MAINWINDOW_H

@@ -23,6 +23,7 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QCheckBox>
+#include <QLineEdit>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QKeySequenceEdit>
@@ -45,6 +46,8 @@ Profile::Profile(QWidget* parent) : QWidget(parent)
     tabLayout = new QVBoxLayout;
 
     enableCheckBox = new QCheckBox;
+    maxTimeoutLabel = new QLabel;
+    maxTimeoutInputBox = new QLineEdit;
     shortcutLabel = new QLabel;
     shortcutEdit = new QKeySequenceEdit;
     modelLabel = new QLabel;
@@ -54,7 +57,13 @@ Profile::Profile(QWidget* parent) : QWidget(parent)
     promptLabel = new QLabel;
     promptTextEdit = new QTextEdit;
 
-    tabLayout->addWidget(enableCheckBox);
+    QHBoxLayout *topLayout = new QHBoxLayout;
+    topLayout->addWidget(enableCheckBox);
+    topLayout->addWidget(maxTimeoutLabel);
+    topLayout->addWidget(maxTimeoutInputBox);
+    topLayout->addWidget(new QLabel("ms"));
+
+    tabLayout->addLayout(topLayout);
     tabLayout->addWidget(shortcutLabel);
     tabLayout->addWidget(shortcutEdit);
     tabLayout->addWidget(modelLabel);
@@ -65,6 +74,7 @@ Profile::Profile(QWidget* parent) : QWidget(parent)
     tabLayout->addWidget(promptTextEdit);
 
     enableCheckBox->setChecked(true);
+    maxTimeoutInputBox->setValidator(new QIntValidator(0, defaultMaxTimeout, this));
     shortcutEdit->setClearButtonEnabled(true);
     shortcutEdit->setMaximumSequenceLength(4);
     modelComboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
@@ -101,6 +111,7 @@ Profile::retranslate
 void Profile::retranslate()
 {
     enableCheckBox->setText(QCoreApplication::translate("MainWindow", "Enable"));
+    maxTimeoutLabel->setText(QCoreApplication::translate("MainWindow", "Max Timeout:"));
     shortcutLabel->setText(QCoreApplication::translate("MainWindow", "Shortcut:"));
     modelLabel->setText(QCoreApplication::translate("MainWindow", "Model:"));
     keyLabel->setText(QCoreApplication::translate("MainWindow", "API key:"));
@@ -122,6 +133,7 @@ void Profile::readSettings()
     shortcutEdit->setKeySequence(QKeySequence(settings.value("Shortcut" + QString::number(id)).toString()));
     promptTextEdit->setText(settings.value("Prompt" + QString::number(id), defaultPrompt).toString());
     m_hiddenPrompt.assign(settings.value("HiddenPrompt" + QString::number(id), ::hiddenPrompt).toString());
+    maxTimeoutInputBox->setText(QString::number(settings.value("MaxTimeout" + QString::number(id), defaultMaxTimeout).toInt()));
 
     if (modelComboBox->count())
     {
@@ -153,6 +165,7 @@ void Profile::writeSettings() const
     settings.setValue("Shortcut" + QString::number(id), shortcutEdit->keySequence());
     settings.setValue("Prompt" + QString::number(id), promptTextEdit->toPlainText());
     settings.setValue("HiddenPrompt" + QString::number(id), m_hiddenPrompt);
+    settings.setValue("MaxTimeout" + QString::number(id), maxTimeoutInputBox->text());
 
     if (modelComboBox->count())
         settings.setValue("CurrentModel" + QString::number(id), modelComboBox->currentText());
@@ -169,7 +182,7 @@ void Profile::enableStateChanged(Qt::CheckState state)
 {
     bool enable = false;
 
-    int offset = id * NUMBER_OF_TABS;
+    int offset = id * numberOfProfiles;
 
     if (state == Qt::Unchecked)
     {
@@ -186,6 +199,7 @@ void Profile::enableStateChanged(Qt::CheckState state)
             registerShortcut(offset + i, shortcutEdit->keySequence()[i]);
     }
 
+    maxTimeoutInputBox->setEnabled(enable);
     shortcutLabel->setEnabled(enable);
     shortcutEdit->setEnabled(enable);
     modelLabel->setEnabled(enable);
@@ -207,7 +221,7 @@ void Profile::keySequenceChanged(const QKeySequence &keySequence)
     if (keySequence.isEmpty())
         retranslate();
 
-    int offset = id * NUMBER_OF_TABS;
+    int offset = id * numberOfProfiles;
 
     for (int i = 0; i < 4; i++)
         unregisterShortcut(offset + i);

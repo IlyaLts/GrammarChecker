@@ -95,5 +95,9 @@
             <source>Report a Bug</source>
             <translation>किसी समस्या की शिकायत करें</translation>
         </message>
+        <message>
+            <source>Max Timeout:</source>
+            <translation>अधिकतम समय-सीमा:</translation>
+        </message>
     </context>
 </TS>

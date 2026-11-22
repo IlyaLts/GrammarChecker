@@ -27,6 +27,7 @@
 #include <QTextEdit>
 
 class QCheckBox;
+class QLineEdit;
 class QVBoxLayout;
 class ModelProvider;
 class QLabel;
@@ -57,6 +58,7 @@ public:
     inline QString key() const { return keyLineEdit->text(); }
     inline QString prompt() const { return promptTextEdit->toPlainText(); }
     inline const QString & hiddenPrompt() const { return m_hiddenPrompt; }
+    inline int maxTimout() const { return maxTimeoutInputBox->text().toInt(); }
 
 private Q_SLOTS:
 
@@ -71,6 +73,8 @@ private:
 
     int id;
     QCheckBox *enableCheckBox;
+    QLabel *maxTimeoutLabel;
+    QLineEdit *maxTimeoutInputBox;
     QVBoxLayout *tabLayout;
     QLabel *shortcutLabel;
     QKeySequenceEdit *shortcutEdit;

@@ -83,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     notification.setSource(QUrl::fromLocalFile("sounds/notification.wav"));
 
-    for (int i = 0; i < NUMBER_OF_TABS; i++)
+    for (int i = 0; i < numberOfProfiles; i++)
     {
         profiles[i] = new Profile();
         ui->tabWidget->addTab(profiles[i], tr("Profile") + " " + QString::number(i + 1));
@@ -139,6 +139,7 @@ MainWindow::showMessage
 void MainWindow::showMessage(const QString &title, const QString &message)
 {
 #ifdef QT_DEBUG
+    Q_UNUSED(title);
     qDebug() << message;
 #else
     if (QSystemTrayIcon::isSystemTrayAvailable())
@@ -155,7 +156,7 @@ MainWindow::checkGrammar
 */
 void MainWindow::checkGrammar(int id)
 {
-    if (id < 0 || id >= NUMBER_OF_TABS)
+    if (id < 0 || id >= numberOfProfiles)
         return;
 
     QClipboard *clipboard = QApplication::clipboard();
@@ -192,7 +193,7 @@ void MainWindow::checkGrammar(int id)
         return;
     }
 
-    oai.auth.SetMaxTimeout(maxTimeout);
+    oai.auth.SetMaxTimeout(profiles[id]->maxTimout());
 
     if (oai.auth.SetKey(profiles[id]->key().toUtf8().data()))
     {
@@ -531,8 +532,7 @@ void MainWindow::readSettings()
     bool showInTray = settings.value("ShowInTray", QSystemTrayIcon::isSystemTrayAvailable()).toBool();
     showInTrayAction->setChecked(showInTray);
     language = static_cast<QLocale::Language>(settings.value("Language", QLocale::system().language()).toInt());
-    smoothTypingDelay = settings.value("SmoothTypingDynamicDelay", SMOOTH_TYPING_DELAY).toInt();
-    maxTimeout = settings.value("MaxTimeout", MAX_TIMEOUT).toInt();
+    smoothTypingDelay = settings.value("SmoothTypingDynamicDelay", smoothTypingDelay).toInt();
 
 #ifdef Q_OS_WIN
     smoothTypingAction->setChecked(settings.value("SmoothTyping", true).toBool());
@@ -593,7 +593,7 @@ void MainWindow::readSettings()
         providers.insert("OpenRouter", { "https://openrouter.ai/api/v1", "", { "openrouter/free" } });
     }
 
-    for (int i = 0; i < NUMBER_OF_TABS; i++)
+    for (int i = 0; i < numberOfProfiles; i++)
     {
         profiles[i]->setProviders(providers);
         profiles[i]->readSettings();
@@ -625,7 +625,6 @@ void MainWindow::writeSettings() const
     settings.setValue("ShowInTray", showInTrayAction->isChecked());
     settings.setValue("Language", language);
     settings.setValue("SmoothTypingDynamicDelay", smoothTypingDelay);
-    settings.setValue("MaxTimeout", maxTimeout);
 
     // Models
     for (auto it = providers.begin(); it != providers.end(); it++)
@@ -642,7 +641,7 @@ void MainWindow::writeSettings() const
         settings.endGroup();
     }
 
-    for (int i = 0; i < NUMBER_OF_TABS; i++)
+    for (int i = 0; i < numberOfProfiles; i++)
         profiles[i]->writeSettings();
 }
 
@@ -668,6 +667,6 @@ void MainWindow::retranslate()
     for (int i = 0; i < ui->tabWidget->count(); i++)
         ui->tabWidget->setTabText(i, tr("Profile") + " " + QString::number(i + 1));
 
-    for (int i = 0; i < NUMBER_OF_TABS; i++)
+    for (int i = 0; i < numberOfProfiles; i++)
         profiles[i]->retranslate();
 }
